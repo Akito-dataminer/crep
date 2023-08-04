@@ -1,0 +1,5 @@
+#define TAG_AND_BUILD_STRING "${TAG_AND_BUILD_STRING}"
+#define SOFTWARE_NAME        "${SOFTWARE_NAME}"
+
+#define VERSION_STRING  \
+    "${SOFTWARE_NAME} ${TAG_AND_BUILD_STRING}\nCopyright(C) 2022 ${LICENSE_HOLDER} all rights reserved."
