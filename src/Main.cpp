@@ -21,13 +21,19 @@
 int main( int argc, char const * argv[] ) {
   // スケルトンプログラムを保管しているディレクトリを設定する。
 #ifdef _WIN32
-  char const * skeleton_dir = std::getenv( "LocalAppData" );
-#endif
+  std::string skeleton_dir( std::getenv( "LocalAppData" ) );
   if ( skeleton_dir == nullptr ) {
     std::cerr << "The environment variable \"LOCALAPPDATA\" is not defined." << std::endl;
     return -1;
   }
-
+#elif __linux__
+  char const * home_dir = std::getenv( "HOME" );
+  if ( home_dir == nullptr ) {
+    std::cerr << "The environment variable \"LOCALAPPDATA\" is not defined." << std::endl;
+    return -1;
+  }
+  std::string skeleton_dir = std::string( home_dir ) + std::string( "\\.config\\crep" );
+#endif
   std::string const skeleton_name = ".cpp_skeleton";
   std::string const program_name = "crep";
   std::string const skeleton_path = std::string( skeleton_dir ) + '\\' + program_name + '\\' + skeleton_name;
