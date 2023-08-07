@@ -18,6 +18,15 @@
 #  include <filesystem>
 #endif
 
+void recursive_scan_directory( std::string const &scanning_path, std::vector<std::string> &paths ) {
+  for ( const auto &entry : std::filesystem::directory_iterator( scanning_path ) ) {
+    paths.emplace_back( entry.path().string() );
+    if ( std::filesystem::is_directory( entry ) ) {
+      recursive_scan_directory( entry.path().string(), paths );
+    }
+  }
+}
+
 int main( int argc, char const * argv[] ) {
   // スケルトンプログラムを保管しているディレクトリを設定する。
 #ifdef _WIN32
@@ -32,11 +41,11 @@ int main( int argc, char const * argv[] ) {
     std::cerr << "The environment variable \"LOCALAPPDATA\" is not defined." << std::endl;
     return -1;
   }
-  std::string skeleton_dir = std::string( home_dir ) + std::string( "\\.config\\crep" );
+  std::string skeleton_dir = std::string( home_dir ) + '/' + std::string( ".config" );
 #endif
   std::string const skeleton_name = ".cpp_skeleton";
   std::string const program_name = "crep";
-  std::string const skeleton_path = std::string( skeleton_dir ) + '\\' + program_name + '\\' + skeleton_name;
+  std::string const skeleton_path = std::string( skeleton_dir ) + '/' + program_name + '/' + skeleton_name;
 
   bool is_project_skeleton_exist = std::filesystem::is_directory( skeleton_path );
 
@@ -45,15 +54,9 @@ int main( int argc, char const * argv[] ) {
   }
 
   // コピー元のリストを作成
-  std::filesystem::directory_iterator d_itr( skeleton_path ), end;
-
   std::vector<std::string> file_paths;
 
-  for ( ; d_itr != end; ++d_itr ) {
-    const std::filesystem::directory_entry entry = *d_itr;
-
-    file_paths.emplace_back( entry.path().string() );
-  }
+  recursive_scan_directory( skeleton_path, file_paths );
 
   for ( auto itr : file_paths ) {
     std::cout << "file_path : " << itr << std::endl;
