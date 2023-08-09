@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 
+namespace path {
+
 void recursive_scan_directory( std::string const &scanning_path, std::vector<std::string> &paths ) {
   for ( const auto &entry : std::filesystem::directory_iterator( scanning_path ) ) {
     paths.emplace_back( entry.path().string() );
@@ -25,3 +27,4 @@ std::vector<std::string> recursive_scan_directory( std::string const &scanning_p
   return paths;
 }
 
+}  // path
