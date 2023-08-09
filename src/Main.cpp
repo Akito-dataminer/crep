@@ -23,7 +23,7 @@ int main( int argc, char const * argv[] ) {
   bool is_project_skeleton_exist = std::filesystem::is_directory( skeleton_dir );
 
   if ( !is_project_skeleton_exist ) {
-    std::cerr << "Tere is NOT project skeleton in " << skeleton_dir << std::endl;
+    std::cerr << "There is NOT project skeleton in " << skeleton_dir << std::endl;
   }
 
   std::vector<std::string> const original_paths = recursive_scan_directory( skeleton_dir );
