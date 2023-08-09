@@ -26,7 +26,7 @@ int main( int argc, char const * argv[] ) {
     std::cerr << "There is NOT project skeleton in " << skeleton_dir << std::endl;
   }
 
-  std::vector<std::string> const original_paths = recursive_scan_directory( skeleton_dir );
+  std::vector<std::string> const original_paths = path::recursive_scan_directory( skeleton_dir );
   int skeleton_dir_length = skeleton_dir.length() + 1; // skeleton_dirは、末尾が'/'になっていないので、+1しておく
   std::vector<std::pair<std::string, std::string>> source_to_dest;
 
