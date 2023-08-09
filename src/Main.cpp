@@ -31,11 +31,11 @@ int main( int argc, char const * argv[] ) {
   std::vector<std::pair<std::string, std::string>> source_to_dest;
 
   for ( auto itr : original_paths ) {
-    std::string dist_name = itr.substr( skeleton_dir_length );
-    if ( dist_name.substr( 0, 4 ) == ".git" ) { continue; }
-    if ( dist_name.substr( 0, 6 ) == "build/" ) { continue; }
-    if ( dist_name.substr( 0, 7 ) == "LICENSE" ) { continue; }
-    source_to_dest.emplace_back( itr, dist_name );
+    std::string dest_name = itr.substr( skeleton_dir_length );
+    if ( dest_name.substr( 0, 4 ) == ".git" ) { continue; }
+    if ( dest_name.substr( 0, 6 ) == "build/" ) { continue; }
+    if ( dest_name.substr( 0, 7 ) == "LICENSE" ) { continue; }
+    source_to_dest.emplace_back( itr, dest_name );
   }
 
   for ( auto itr : source_to_dest ) {
