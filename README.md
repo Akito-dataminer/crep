@@ -51,7 +51,7 @@ Of course, it doesn't matter if that happens. However, even if such a thing were
 
 The purpose of this project is to help create projects, nothing more, nothing less.
 
-## 実現手段
+## Realization method( 実現手段 )
 crepを実行して得られるものを、プロジェクトの開始点、あるいは単に開始点と呼ぶことにしよう。
 つまりプロジェクトの開始点とは、ある特定のディレクトリ構造を持ったファイル群のことだ。
 
@@ -100,3 +100,21 @@ crepを実行して得られるものを、プロジェクトの開始点、あ�
 しかしこの方法を採用すると、ファイルの内容を細かく制御することが
 難しくなってしまうかもしれない。
 また、スクリプト形式を採用したときよりも容量が大きくなってしまう可能性が高いという問題もある。
+
+Let's call what you get from running crep the starting point, or just the starting point, of your project. So the starting point of a project is a set of files with a certain directory structure.
+
+There are two main ways to create a starting point for your project. One way is to generate a starting point for the project with a script. Another way is to save the template somewhere and copy it to the directory where you want to create the project (in most cases it will be the current directory).
+
+Of these, I prefer the latter method (unless my thinking changes).
+
+There are two reasons. First, it's hard to know what the starting point of a project would look like with scripting control. The second is that it's impossible to compile unless you actually generate it.
+
+The first reason should be obvious. We believe that projects should be as easy to create as possible. The purpose of crep is to make project creation easy, but creating a project becomes so difficult that it becomes a single project. That's the last thing I want to do.
+
+The second reason is that if you can't compile the project in the first place, you'll need to do some more work after creating the project to get it to compile. It is nothing but that crep has not achieved its purpose.
+
+Also, such a state can be said to be a state where an error or bug already exists at the beginning of the project. It is no longer a cancer that spreads to various projects. Just as it would be desirable for a baby to be born without any disease, it would be desirable for a project to be born without any disease. The best way to do this is to see if there are any errors at the start of the generated project. An easy and surefire way to do that would be to try compiling a starting point. In the case of template format, the template itself can be compiled. The template itself is the starting point of the project. However, if you generate the starting point with a script, you must create the starting point with a crep in order to actually compile. Comparing these two methods, it is considered that copying the template is more convenient for the user.
+
+From the above, as a basic policy (currently), I would like to adopt a method of creating a project template and copying that template.
+
+However, this method may make it difficult to control the contents of the file finely. There is also the problem that the capacity is likely to become larger than when the script format is adopted.
