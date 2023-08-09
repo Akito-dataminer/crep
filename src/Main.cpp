@@ -9,6 +9,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <utility>
 
 int main( int argc, char const * argv[] ) {
   // スケルトンプログラムを保管しているディレクトリを設定する。
@@ -25,13 +26,24 @@ int main( int argc, char const * argv[] ) {
     std::cerr << "Tere is NOT project skeleton in " << skeleton_dir << std::endl;
   }
 
-  // コピー元のリストを作成
-  std::vector<std::string> file_paths;
+  std::vector<std::string> const original_paths = recursive_scan_directory( skeleton_dir );
+  int skeleton_dir_length = skeleton_dir.length() + 1; // skeleton_dirは、末尾が'/'になっていないので、+1しておく
+  std::vector<std::pair<std::string, std::string>> source_to_dest;
 
-  recursive_scan_directory( skeleton_dir, file_paths );
+  for ( auto itr : original_paths ) {
+    std::string dist_name = itr.substr( skeleton_dir_length );
+    if ( dist_name.substr( 0, 4 ) == ".git" ) { continue; }
+    if ( dist_name.substr( 0, 6 ) == "build/" ) { continue; }
+    if ( dist_name.substr( 0, 7 ) == "LICENSE" ) { continue; }
+    source_to_dest.emplace_back( itr, dist_name );
+  }
 
-  for ( auto itr : file_paths ) {
-    std::cout << "file_path : " << itr << std::endl;
+  for ( auto itr : source_to_dest ) {
+    if ( std::filesystem::is_directory( itr.first ) ) {
+      std::filesystem::create_directory( itr.second );
+    } else {
+      std::filesystem::copy( itr.first, itr.second );
+    }
   }
 
   return 0;
