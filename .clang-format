@@ -5,6 +5,7 @@ AccessModifierOffset: -2
 AlignAfterOpenBracket: BlockIndent
 ColumnLimit: 120
 DerivePointerAlignment: false
+IndentPPDirectives: AfterHash
 PointerAlignment: Right
 SpacesInParentheses: true
 ...
