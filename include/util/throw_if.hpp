@@ -17,7 +17,7 @@ concept OneOfException = std::is_base_of_v<std::exception, T>;
 
 template <OneOfException T>
 void throw_if( std::function<bool( void )> throw_condition, std::string const &error_message ) {
-  if ( throw_condition ) {
+  if ( throw_condition() ) {
     throw T( error_message );
   }
 }
