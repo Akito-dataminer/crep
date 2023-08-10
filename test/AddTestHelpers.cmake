@@ -38,7 +38,7 @@ function( create_test_case TEST_SOURCE_RELATIVE_PATH )
     set( target_if_msys2 "-target x86_64-w64-windows-gnu" )
   endif()
 
-  target_compile_options(${OUTPUT} PUBLIC
+  target_compile_options(${TEST_NAME} PUBLIC
     $<${gcc_like_cxx}:-Wall -Wextra -Wshadow -Wformat=2 -Wunused> 
     "$<${msvc_cxx}:-W3>"
     ${target_if_msys2}
