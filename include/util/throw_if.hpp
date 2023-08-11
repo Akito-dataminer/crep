@@ -22,4 +22,11 @@ void throw_if( std::function<bool( void )> throw_condition, std::string const &e
   }
 }
 
+template <OneOfException T>
+void throw_if( bool const throw_condition, std::string const &error_message ) {
+  if ( throw_condition ) {
+    throw T( error_message );
+  }
+}
+
 }  // namespace util
