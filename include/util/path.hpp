@@ -6,7 +6,6 @@
 
 #include "config/config.hpp"
 
-#include <concepts>
 #include <functional>
 #include <string>
 #include <type_traits>

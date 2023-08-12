@@ -18,6 +18,10 @@
 #  include <filesystem>
 #endif
 
+#if CXX_STD >= 202002
+#  include <concepts>
+#endif
+
 #ifdef _WIN32
 STATIC_CONSTEXPR char const *GET_ENVIRONMENT_VARIABLE = "LocalAppData";
 STATIC_CONSTEXPR char const *APPEND_DIRECTORY = "/crep/.cpp_skeleton";
