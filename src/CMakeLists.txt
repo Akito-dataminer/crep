@@ -34,7 +34,12 @@ endif()
 
 target_compile_options(${OUTPUT} PUBLIC
   ${warning_options}
+  -stdlib=libc++
   "${target_if_msys2}"
+)
+
+target_link_options(${OUTPUT} PUBLIC
+  -stdlib=libc++
 )
 
 # C++標準規格の指定 cxx_std_20はcmake3.12以降で指定可能
