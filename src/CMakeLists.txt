@@ -32,14 +32,23 @@ if(MINGW)
   set( target_if_msys2 -target x86_64-w64-windows-gnu )
 endif()
 
+# slib : command line argument
+set_target_properties(${OUTPUT} PROPERTIES
+  STANDARD_LIBRARY $<$<COMPILE_LANG_AND_ID:CXX,ARMClang,AppleClang,Clang,GNU>:${slib}>
+)
+
+set( stdlib $<TARGET_GENEX_EVAL:${OUTPUT},$<TARGET_PROPERTY:${OUTPUT},STANDARD_LIBRARY>> )
+set( stdlib_option -stdlib=${stdlib} )
+message( STATUS "used standard library: ${slib}" )
+
 target_compile_options(${OUTPUT} PUBLIC
   ${warning_options}
-  -stdlib=libc++
+  ${stdlib_option}
   "${target_if_msys2}"
 )
 
 target_link_options(${OUTPUT} PUBLIC
-  -stdlib=libc++
+  ${stdlib_option}
 )
 
 # C++標準規格の指定 cxx_std_20はcmake3.12以降で指定可能
