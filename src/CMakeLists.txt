@@ -14,8 +14,18 @@ target_include_directories( ${OUTPUT} PUBLIC ${INCLUDE_DIRECTORY} )
 # コンパイルフラグを追加
 # MSVCとgcc系のコンパイラでは、オプションの指定方法が違うので、
 # それに対応するためにジェネレータ式を利用している。
-set( gcc_like_cxx "$<COMPILE_LANG_AND_ID:CXX,ARMClang,AppleClang,Clang,GNU>" )
-set( msvc_cxx "$<COMPILE_LANG_AND_ID:CXX,MSVC>" )
+set_target_properties(${OUTPUT} PROPERTIES
+  COMPILE_OPTIONS_FOR_CLANG_LIKE $<$<COMPILE_LANG_AND_ID:CXX,ARMClang,AppleClang,Clang,GNU>:-Wall;-Wextra;-Wshadow;-Wformat=2;-Wunused>
+)
+set_target_properties(${OUTPUT} PROPERTIES
+  COMPILE_OPTIONS_FOR_MSVC $<$<COMPILE_LANG_AND_ID:CXX,MSVC>:-W3>
+)
+set( warning_options 
+$<JOIN,
+  $<TARGET_GENEX_EVAL:${OUTPUT},$<TARGET_PROPERTY:${OUTPUT},COMPILE_OPTIONS_FOR_CLANG_LIKE>>
+  $<TARGET_GENEX_EVAL:${OUTPUT},$<TARGET_PROPERTY:${OUTPUT},COMPILE_OPTIONS_FOR_MSVC>>
+, >)
+
 set( target_if_msys2 "" )
 
 if(MINGW)
@@ -26,8 +36,7 @@ if(MINGW)
 endif()
 
 target_compile_options(${OUTPUT} PUBLIC
-  $<${gcc_like_cxx}:-Wall -Wextra -Wshadow -Wformat=2 -Wunused>
-  "$<${msvc_cxx}:-W3>"
+  ${warning_options}
   "${target_if_msys2}"
 )
 
