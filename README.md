@@ -118,3 +118,37 @@ Also, such a state can be said to be a state where an error or bug already exist
 From the above, as a basic policy (currently), I would like to adopt a method of creating a project template and copying that template.
 
 However, this method may make it difficult to control the contents of the file finely. There is also the problem that the capacity is likely to become larger than when the script format is adopted.
+
+# How to use this software?( このソフトウェアを使うには？ )
+## How to install?( インストール方法 )
+いずれ簡単にインストールできる方法も作ろうとは考えているが、
+ひとまず基本機能を作ることを優先しているため、
+今はまだ簡単にインストールできるような方法は作っていない。
+
+このプログラムを利用したければ、現状ではソースコードからビルドしていただくより他にない。
+
+もしもビルドしたければ、ソースコードをgit cloneなどでダウンロードした後、
+このプロジェクトのルートディレクトリで次のようなコマンドを入力してほしい。
+
+以下のいずれかのコマンドを実行すると、
+プロジェクトのルートディレクトリに置いているbuild.cmakeがスクリプトモードで実行される。
+
+すると、プロジェクトルートに新しくbuild/というディレクトリが作られる。
+そのbuild/をさらに進んだ先にある<project_root>/build/src/crepというファイルが実行ファイルとなっている
+(ただし、<project_root>は人によって様々だろうから、適宜自分の環境に合わせて読み変えてほしい)。
+crepを他のコマンドと同じく、"crep"とコマンドラインに入力しただけで実行してほしければ、
+<project_root>/build/src/というディレクトリを環境変数に登録すればいい。
+もしくは、環境変数に登録されているディレクトリに、
+<project_root>/build/src/crepへのリンクを作ればいい。
+
+### If you want to use libstdc++( libstdc++を利用してビルドしたい場合 )
+cmake -Dslib=libstdc++ -P build.cmake
+もしくは、
+cmake -P build.cmake
+
+### If you want to use libc++( libc++を利用してビルドしたい場合 )
+cmake -Dslib=libc++ -P build.cmake
+
+## ビルド時の注意事項
+このソフトウェアは、Ubuntu 22.04LTS上では問題なく動作することを確認している。
+しかし、他の環境でも動作するかどうかは分からない。
