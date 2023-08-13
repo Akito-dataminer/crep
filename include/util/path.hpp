@@ -10,6 +10,7 @@
 #include <string>
 #include <type_traits>
 #include <vector>
+#include <type_traits>
 
 namespace path {
 
@@ -18,8 +19,26 @@ std::vector<std::string> recursive_scan_directory( std::string const &scanning_p
 
 class joint;
 
+#ifdef __cpp_concepts
 template <typename T>
 concept convirtible_to_joint = std::is_convertible_v<T, joint>;
+#else
+template<typename T>
+STATIC_CONSTEXPR bool const is_jointable_v = std::is_convertible_v<T, joint>;
+
+template<typename T>
+struct Jointable {
+  using type = std::enable_if_t<is_jointable_v<T>, std::type_identity<T>>;
+};
+#endif
+
+#if __cpp_concepts
+#  define TEMPLATE_HEAD_JOINTABLE template <convirtible_to_joint T>
+#  define JOINTABLE_TYPE T
+#else
+#  define TEMPLATE_HEAD_JOINTABLE template <convirtible_to_joint Jointable>
+#  define JOINTABLE_TYPE Jointable<T>
+#endif
 
 class joint {
 public:
@@ -35,13 +54,13 @@ public:
   std::string to_string() noexcept { return path_element_; }
   std::string const & to_string() const noexcept { return path_element_; }
 
-  template<convirtible_to_joint Jointable>
-  inline joint& operator+= ( Jointable const &rhs ) noexcept {
-    return concate( rhs );
+  TEMPLATE_HEAD_JOINTABLE
+  inline joint &operator+= ( JOINTABLE_TYPE const &rhs ) noexcept {
+    return concate<T>( rhs );
   }
 
-  template<convirtible_to_joint Jointable>
-  friend inline joint operator+ ( joint const &lhs, Jointable const &rhs ) noexcept {
+  TEMPLATE_HEAD_JOINTABLE
+  friend inline joint operator+( joint const &lhs, JOINTABLE_TYPE const &rhs ) noexcept {
     return joint( lhs ) += rhs;
   }
 
@@ -57,14 +76,14 @@ private:
   // 不正な文字列が使われていないかどうかを調べる
   void isCorrect( std::string const & ) const;
 
-  template <convirtible_to_joint Jointable>
-  joint &concate( Jointable const &rhs ) noexcept;
+  TEMPLATE_HEAD_JOINTABLE
+  joint &concate( JOINTABLE_TYPE const &rhs ) noexcept;
 };
 
-template<convirtible_to_joint Jointable>
-joint& joint::concate( Jointable const &rhs ) noexcept {
+TEMPLATE_HEAD_JOINTABLE
+joint& joint::concate( JOINTABLE_TYPE const &rhs ) noexcept {
   path_element_ += PATH_SEPARATOR;
-  if constexpr ( std::is_same_v<Jointable, joint> ) {
+  if constexpr ( std::is_same_v<JOINTABLE_TYPE, joint> ) {
     path_element_ += rhs.path_element_;
   } else {
     path_element_ += rhs;
