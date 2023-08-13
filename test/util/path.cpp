@@ -10,17 +10,17 @@ BOOST_AUTO_TEST_SUITE( test_joint )
 
 BOOST_AUTO_TEST_CASE( test_case1 ) {
   using namespace path;
-  static_assert( std::is_convertible_v<std::string, joint> == true );
-  static_assert( std::is_convertible_v<joint, joint> == true );
-  static_assert( std::is_convertible_v<int, joint> == false );
+  static_assert( std::is_convertible_v<std::string, branch> == true );
+  static_assert( std::is_convertible_v<branch, branch> == true );
+  static_assert( std::is_convertible_v<int, branch> == false );
 }
 
 BOOST_AUTO_TEST_CASE( test_case2 ) {
   using namespace path;
 
-  joint j1( "a" );
-  joint const j2( "a" ), j3( "b" );
-  joint const connected( "a/b" );
+  branch j1( "a" );
+  branch const j2( "a" ), j3( "b" );
+  branch const connected( "a/b" );
   std::string str1( "c" );
 
   BOOST_TEST( ( j1 == j2 ) == true );
@@ -43,10 +43,10 @@ BOOST_AUTO_TEST_CASE( test_case2 ) {
 BOOST_AUTO_TEST_CASE( test_case3 ) {
   using namespace path;
 
-  joint j( "a" );
+  branch j( "a" );
   j.modify( []( std::string & str ) { str += "b"; } );
 
-  BOOST_TEST( ( j == joint( "ab" ) ) == true );
+  BOOST_TEST( ( j == branch( "ab" ) ) == true );
 }
 
 BOOST_AUTO_TEST_CASE( test_case4 ) {
