@@ -1,5 +1,6 @@
 #include "config/config.hpp"
 #include "util/path.hpp"
+#include "util/throw_if.hpp"
 
 #include <vector>
 #include <string>
