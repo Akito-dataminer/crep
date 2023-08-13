@@ -1,12 +1,11 @@
-#include "util/path.hpp"
+#include "path/branch.hpp"
 
 #include <boost/test/unit_test.hpp>
-
 #include <iostream>
 #include <string>
 #include <type_traits>
 
-BOOST_AUTO_TEST_SUITE( test_joint )
+BOOST_AUTO_TEST_SUITE( test_branch )
 
 BOOST_AUTO_TEST_CASE( test_case1 ) {
   using namespace path;
@@ -44,13 +43,11 @@ BOOST_AUTO_TEST_CASE( test_case3 ) {
   using namespace path;
 
   branch j( "a" );
-  j.modify( []( std::string & str ) { str += "b"; } );
+  j.modify( []( std::string &str ) { str += "b"; } );
 
   BOOST_TEST( ( j == branch( "ab" ) ) == true );
 }
 
-BOOST_AUTO_TEST_CASE( test_case4 ) {
-  using namespace path;
-}
+BOOST_AUTO_TEST_CASE( test_case4 ) { using namespace path; }
 
 BOOST_AUTO_TEST_SUITE_END()

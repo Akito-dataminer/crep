@@ -28,19 +28,4 @@ std::vector<std::string> recursive_scan_directory( std::string const &scanning_p
   return paths;
 }
 
-branch::branch( std::string const & path_element ) : path_element_( path_element ) {
-  isCorrect( path_element_ );
-}
-
-[[deprecated]] void branch::modify( std::function<void ( std::string & )> modify_function ) {
-  modify_function( path_element_ );
-}
-
-void branch::isCorrect( std::string const & path_element ) const {
-  util::throw_if<std::invalid_argument>(
-      (bool)( ( path_element.find( '\0' ) != std::string::npos ) ),
-      "There is prohibited characters"
-  );
-}
-
 }  // path
