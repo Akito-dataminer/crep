@@ -3,6 +3,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include <iostream>
+#include <string>
 #include <type_traits>
 
 BOOST_AUTO_TEST_SUITE( test_joint )
@@ -19,15 +20,24 @@ BOOST_AUTO_TEST_CASE( test_case2 ) {
 
   joint j1( "a" );
   joint const j2( "a" ), j3( "b" );
-  joint const concatenated( "a/b" );
+  joint const connected( "a/b" );
+  std::string str1( "c" );
 
   BOOST_TEST( ( j1 == j2 ) == true );
   BOOST_TEST( ( j1 != j3 ) == true );
 
   j1 += j3;
-  BOOST_TEST( ( j1 == concatenated ) == true );
+  BOOST_TEST( ( j1 == connected ) == true );
   BOOST_TEST( ( j1 == j2 + j3 ) == true );
   BOOST_TEST( ( j1 != j1 + j2 ) == true );
+
+  j1 += str1;
+  BOOST_TEST( ( j1 == j2 + j3 + str1 ) == true );
+  BOOST_TEST( ( j1.to_string() == std::string( "a/b/c" ) ) == true );
+
+  // below codes should be error
+  // j1 += 1;
+  // j1 += 'a';
 }
 
 BOOST_AUTO_TEST_CASE( test_case3 ) {
