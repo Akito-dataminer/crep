@@ -27,9 +27,9 @@ STATIC_CONSTEXPR bool const is_convertible_to_branch = std::is_convertible_v<T, 
 
 // Absorb the difference between concepts and meta-functions.
 #ifdef __cpp_concepts
-#  define TEMPLATE_HEAD_JOINTABLE template <convirtible_to_branch T>
+#  define TEMPLATE_HEAD_BRANCH template <convirtible_to_branch T>
 #else
-#  define TEMPLATE_HEAD_JOINTABLE template <typename T, util::if_nullp_c<is_convertible_to_branch<T>> * = nullptr>
+#  define TEMPLATE_HEAD_BRANCH template <typename T, util::if_nullp_c<is_convertible_to_branch<T>> * = nullptr>
 #endif
 
 class branch {
@@ -46,10 +46,10 @@ public:
   std::string to_string() noexcept { return path_element_; }
   std::string const &to_string() const noexcept { return path_element_; }
 
-  TEMPLATE_HEAD_JOINTABLE
+  TEMPLATE_HEAD_BRANCH
   inline branch &operator+=( T const &rhs ) noexcept { return this->connect<T>( rhs ); }
 
-  TEMPLATE_HEAD_JOINTABLE
+  TEMPLATE_HEAD_BRANCH
   friend inline branch operator+( branch const &lhs, T const &rhs ) noexcept { return branch( lhs ) += rhs; }
 
   friend inline constexpr bool operator==( branch const &lhs, branch const &rhs ) noexcept {
@@ -63,7 +63,7 @@ private:
   // 不正な文字列が使われていないかどうかを調べる
   void isCorrect( std::string const & ) const;
 
-  TEMPLATE_HEAD_JOINTABLE
+  TEMPLATE_HEAD_BRANCH
   branch &connect( T const &rhs ) noexcept {
     path_element_ += PATH_SEPARATOR;
     if constexpr ( std::is_same_v<T, branch> ) {
