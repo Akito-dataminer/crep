@@ -5,6 +5,7 @@
 #pragma once
 
 #include "config/config.hpp"
+#include "util/util.hpp"
 
 #include <functional>
 #include <string>
@@ -19,25 +20,20 @@ std::vector<std::string> recursive_scan_directory( std::string const &scanning_p
 
 class joint;
 
+// Define conditions by concept and metafunction.
 #ifdef __cpp_concepts
 template <typename T>
 concept convirtible_to_joint = std::is_convertible_v<T, joint>;
 #else
 template<typename T>
-STATIC_CONSTEXPR bool const is_jointable_v = std::is_convertible_v<T, joint>;
-
-template<typename T>
-struct Jointable {
-  using type = std::enable_if_t<is_jointable_v<T>, std::type_identity<T>>;
-};
+STATIC_CONSTEXPR bool const is_convertible_to_joint = std::is_convertible_v<T, joint>;
 #endif
 
-#if __cpp_concepts
+// Absorb the difference between concepts and meta-functions.
+#ifdef __cpp_concepts
 #  define TEMPLATE_HEAD_JOINTABLE template <convirtible_to_joint T>
-#  define JOINTABLE_TYPE T
 #else
-#  define TEMPLATE_HEAD_JOINTABLE template <convirtible_to_joint Jointable>
-#  define JOINTABLE_TYPE Jointable<T>
+#  define TEMPLATE_HEAD_JOINTABLE template<typename T, util::if_nullp_c<is_convertible_to_joint<T>>* = nullptr>
 #endif
 
 class joint {
@@ -55,12 +51,12 @@ public:
   std::string const & to_string() const noexcept { return path_element_; }
 
   TEMPLATE_HEAD_JOINTABLE
-  inline joint &operator+= ( JOINTABLE_TYPE const &rhs ) noexcept {
-    return concate<T>( rhs );
+  inline joint &operator+= ( T const &rhs ) noexcept {
+    return this->connect<T>( rhs );
   }
 
   TEMPLATE_HEAD_JOINTABLE
-  friend inline joint operator+( joint const &lhs, JOINTABLE_TYPE const &rhs ) noexcept {
+  friend inline joint operator+( joint const &lhs, T const &rhs ) noexcept {
     return joint( lhs ) += rhs;
   }
 
@@ -77,18 +73,15 @@ private:
   void isCorrect( std::string const & ) const;
 
   TEMPLATE_HEAD_JOINTABLE
-  joint &concate( JOINTABLE_TYPE const &rhs ) noexcept;
-};
-
-TEMPLATE_HEAD_JOINTABLE
-joint& joint::concate( JOINTABLE_TYPE const &rhs ) noexcept {
-  path_element_ += PATH_SEPARATOR;
-  if constexpr ( std::is_same_v<JOINTABLE_TYPE, joint> ) {
-    path_element_ += rhs.path_element_;
-  } else {
-    path_element_ += rhs;
+  joint& connect( T const &rhs ) noexcept {
+    path_element_ += PATH_SEPARATOR;
+    if constexpr ( std::is_same_v<T, joint> ) {
+      path_element_ += rhs.path_element_;
+    } else {
+      path_element_ += rhs;
+    }
+    return *this;
   }
-  return *this;
-}
+};
 
 } // path
