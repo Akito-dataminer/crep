@@ -19,7 +19,7 @@ class branch;
 // Define conditions by concept and metafunction.
 #ifdef __cpp_concepts
 template <typename T>
-concept convirtible_to_branch = std::is_convertible_v<T, branch>;
+concept convertible_to_branch = std::is_convertible_v<T, branch>;
 #else
 template <typename T>
 STATIC_CONSTEXPR bool const is_convertible_to_branch = std::is_convertible_v<T, branch>;
@@ -27,7 +27,7 @@ STATIC_CONSTEXPR bool const is_convertible_to_branch = std::is_convertible_v<T, 
 
 // Absorb the difference between concepts and meta-functions.
 #ifdef __cpp_concepts
-#  define TEMPLATE_HEAD_BRANCH template <convirtible_to_branch T>
+#  define TEMPLATE_HEAD_BRANCH template <convertible_to_branch T>
 #else
 #  define TEMPLATE_HEAD_BRANCH template <typename T, util::if_nullp_c<is_convertible_to_branch<T>> * = nullptr>
 #endif
