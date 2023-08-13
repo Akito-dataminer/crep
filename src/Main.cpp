@@ -11,7 +11,7 @@
 #include <vector>
 #include <utility>
 
-int main( int argc, char const * argv[] ) {
+int main( int const argc, char const * argv[] ) {
   // スケルトンプログラムを保管しているディレクトリを設定する。
   char const * environment_variable = std::getenv( GET_ENVIRONMENT_VARIABLE );
   if ( environment_variable == nullptr ) {
