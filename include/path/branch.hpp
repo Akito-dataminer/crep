@@ -52,10 +52,10 @@ public:
   TEMPLATE_HEAD_BRANCH
   friend inline branch operator+( branch const &lhs, T const &rhs ) noexcept { return branch( lhs ) += rhs; }
 
-  friend inline constexpr bool operator==( branch const &lhs, branch const &rhs ) noexcept {
+  friend inline bool operator==( branch const &lhs, branch const &rhs ) noexcept {
     return lhs.to_string() == rhs.to_string();
   }
-  friend inline constexpr bool operator!=( branch const &lhs, branch const &rhs ) noexcept { return !( lhs == rhs ); }
+  friend inline bool operator!=( branch const &lhs, branch const &rhs ) noexcept { return !( lhs == rhs ); }
 
 private:
   std::string path_element_;
