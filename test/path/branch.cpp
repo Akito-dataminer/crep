@@ -19,20 +19,21 @@ BOOST_AUTO_TEST_CASE( test_case2 ) {
 
   branch j1( "a" );
   branch const j2( "a" ), j3( "b" );
-  branch const connected( "a/b" );
+  branch const connected1( std::string( "a" ) + PATH_SEPARATOR + std::string( "b" ) );
+  branch const connected2( std::string( "a" ) + PATH_SEPARATOR + std::string( "b" ) + PATH_SEPARATOR + std::string( "c" ) );
   std::string str1( "c" );
 
   BOOST_TEST( ( j1 == j2 ) == true );
   BOOST_TEST( ( j1 != j3 ) == true );
 
   j1 += j3;
-  BOOST_TEST( ( j1 == connected ) == true );
+  BOOST_TEST( ( j1 == connected1 ) == true );
   BOOST_TEST( ( j1 == j2 + j3 ) == true );
   BOOST_TEST( ( j1 != j1 + j2 ) == true );
 
   j1 += str1;
   BOOST_TEST( ( j1 == j2 + j3 + str1 ) == true );
-  BOOST_TEST( ( j1.to_string() == std::string( "a/b/c" ) ) == true );
+  BOOST_TEST( ( j1.to_string() == connected2 ) == true );
 
   // below codes should be error
   // j1 += 1;
