@@ -31,16 +31,17 @@ function( create_test_case TEST_SOURCE_RELATIVE_PATH )
 
   # コンパイルフラグを追加
   set( gcc_like_cxx "$<COMPILE_LANG_AND_ID:CXX,ARMClang,AppleClang,Clang,GNU>" )
+  set( clang_cxx "$<COMPILE_LANG_AND_ID:CXX,ARMClang,AppleClang,Clang>" )
   set( msvc_cxx "$<COMPILE_LANG_AND_ID:CXX,MSVC>" )
   set( target_if_msys2 "" )
 
   if(MINGW)
-    set( target_if_msys2 "-target x86_64-w64-windows-gnu" )
+    set( target_if_msys2 $<${clang_cxx}:-target x86_64-w64-windows-gnu> )
   endif()
 
   target_compile_options(${TEST_NAME} PUBLIC
     $<${gcc_like_cxx}:-Wall -Wextra -Wshadow -Wformat=2 -Wunused> 
-    "$<${msvc_cxx}:-W3>"
+    $<${msvc_cxx}:-W3>
     ${target_if_msys2}
   )
 
