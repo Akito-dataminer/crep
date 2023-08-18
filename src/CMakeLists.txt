@@ -15,9 +15,6 @@ target_include_directories( ${OUTPUT} PUBLIC ${INCLUDE_DIRECTORY} )
 include( ${PROJECT_SOURCE_DIR}/cmake/compile_option.cmake )
 add_compile_option( ${OUTPUT} )
 
-# C++標準規格の指定 cxx_std_20はcmake3.12以降で指定可能
-target_compile_features( ${OUTPUT} PUBLIC cxx_std_20 )
-
 ##############################
 # バージョン情報を定義したヘッダファイルを生成する
 ##############################

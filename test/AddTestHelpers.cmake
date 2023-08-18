@@ -33,9 +33,6 @@ function( create_test_case TEST_SOURCE_RELATIVE_PATH )
   # コンパイルフラグを追加
   add_compile_option( ${TEST_NAME} )
 
-  # C++標準規格の指定 cxx_std_20はcmake3.12以降で指定可能
-  target_compile_features( ${TEST_NAME} PUBLIC cxx_std_20 )
-
   target_compile_definitions( ${TEST_NAME} PUBLIC BOOST_TEST_NO_LIB=1 )
 
   add_test(
