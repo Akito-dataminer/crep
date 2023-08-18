@@ -3,6 +3,7 @@ cmake_minimum_required( VERSION 3.22.1 )
 
 # プロジェクト名と使用する言語を指定
 project( crep LANGUAGES CXX )
+set( CMAKE_CXX_STANDARD 17 )
 
 # compile_commands.jsonを出力するように設定
 set( CMAKE_EXPORT_COMPILE_COMMANDS 1 )
