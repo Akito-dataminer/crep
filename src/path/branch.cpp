@@ -1,5 +1,6 @@
 #include "path/branch.hpp"
 
+#include <iostream>
 #include <iterator>
 
 #include "config/config.hpp"
@@ -11,27 +12,36 @@ BranchIndex::BranchIndex( std::string const &branch_str ) {
   for ( std::string::const_iterator itr = branch_str.begin(); itr != branch_str.end(); ++itr ) {
     std::size_t head_index = std::distance( branch_str.begin(), itr );
     BranchType token_type = type_detection( itr, head_index );
-    if ( token_type != BranchType::DELIMITER ) {
-      token_sequence_.emplace_back( token_type, head_index );
-    }
+    std::size_t length = 0;
 
     switch ( token_type ) {
       case BranchType::ROOT:
 #if _WIN32
+        length = 2;
         ++itr;
-        continue;
+        break;
 #else
-        continue;
+        length = 1;
+        break;
 #endif
         break;
       case BranchType::DELIMITER:
-        continue;
+        length = 1;
+        break;
       case BranchType::BRANCH:
         for ( ;; ++itr ) {
+          ++length;
           if ( ( *( itr + 1 ) == PATH_SEPARATOR ) || ( ( itr + 1 ) == branch_str.cend() ) ) {
             break;
           }
         }
+      default:
+        break;
+    }
+
+    std::cout << "head_index: " << head_index << std::endl;
+    if ( token_type != BranchType::DELIMITER ) {
+      token_sequence_.emplace_back( token_type, head_index, length );
     }
   }
 }

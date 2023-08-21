@@ -63,15 +63,19 @@ BOOST_AUTO_TEST_CASE( test_case4 ) {
 
   BOOST_TEST( ( token0.type() == BranchType::ROOT ) == true );
   BOOST_TEST( ( token0.index() == 0 ) == true );
+  BOOST_TEST( ( token0.length() == 1 ) == true );
 
   BOOST_TEST( ( token1.type() == BranchType::BRANCH ) == true );
   BOOST_TEST( ( token1.index() == 1 ) == true );
+  BOOST_TEST( ( token1.length() == 3 ) == true );
 
   BOOST_TEST( ( token2.type() == BranchType::BRANCH ) == true );
   BOOST_TEST( ( token2.index() == 5 ) == true );
+  BOOST_TEST( ( token2.length() == 7 ) == true );
 
   BOOST_TEST( ( token3.type() == BranchType::BRANCH ) == true );
   BOOST_TEST( ( token3.index() == 13 ) == true );
+  BOOST_TEST( ( token3.length() == 3 ) == true );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
