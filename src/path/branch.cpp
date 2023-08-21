@@ -1,6 +1,5 @@
 #include "path/branch.hpp"
 
-#include <iostream>
 #include <iterator>
 
 #include "config/config.hpp"
@@ -41,14 +40,13 @@ index::index( std::string const &branch_str ) {
         break;
     }
 
-    std::cout << "head_index: " << head_index << std::endl;
     if ( token_type != role::DELIMITER ) {
       token_sequence_.emplace_back( token_type, head_index, length );
     }
   }
 }
 
-role index::type_detection( std::string::const_iterator &itr, std::size_t const index ) const noexcept {
+role index::type_detection( std::string::const_iterator &itr, std::size_t const index ) const {
   role type;
 #if _WIN32
   // ただし、このタイプ判定が期待通りに働くためには
@@ -58,11 +56,15 @@ role index::type_detection( std::string::const_iterator &itr, std::size_t const 
   // その2文字目を指すイテレータが、この関数に渡されてはいけない。
   if ( *( itr + 1 ) == ':' ) {
     if ( *itr >= 'A' && *itr <= 'Z' ) {
-      type = ROOT;
+      type = role::ROOT;
+    } else {
+      type = role::TYPE_NUM;
+      throw std::invalid_argument( "A character was used that should not be in a branch." );
     }
   } else if ( *itr == PATH_SEPARATOR ) {
-    type = Type::DELIMITER;
+    type = role::DELIMITER;
   } else {
+    type = role::BRANCH;
   }
 #else
   if ( *itr == PATH_SEPARATOR ) {

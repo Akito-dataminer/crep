@@ -67,7 +67,7 @@ public:
 private:
   std::vector<branch_token> token_sequence_;
 
-  role type_detection( std::string::const_iterator &, std::size_t const ) const noexcept;
+  role type_detection( std::string::const_iterator &, std::size_t const ) const;
   std::size_t token_length( std::string::const_iterator &, role const ) const noexcept;
 };
 

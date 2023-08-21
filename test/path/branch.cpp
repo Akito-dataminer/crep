@@ -52,15 +52,40 @@ BOOST_AUTO_TEST_CASE( test_case3 ) {
 BOOST_AUTO_TEST_CASE( test_case4 ) {
   using namespace path;
   using namespace path::detail;
+  std::cout << std::endl;
 
+#if _WIN32
+  std::string absolute_path( "C:\\Users\\username\\AppData\\Local\\nvim\\init.lua" );
+#else
   std::string absolute_path( "/usr/include/c++/11/cstdlib" );
+#endif
   detail::index arch( absolute_path );
-  BOOST_TEST( ( arch.branch_num() == 6 ) == true );
 
   branch_token token0 = arch[0];
   branch_token token1 = arch[1];
   branch_token token2 = arch[2];
   branch_token token3 = arch[3];
+
+#if _WIN32
+  BOOST_TEST( ( arch.branch_num() == 7 ) == true );
+
+  BOOST_TEST( ( token0.type() == role::ROOT ) == true );
+  BOOST_TEST( ( token0.index() == 0 ) == true );
+  BOOST_TEST( ( token0.length() == 2 ) == true );
+
+  BOOST_TEST( ( token1.type() == role::BRANCH ) == true );
+  BOOST_TEST( ( token1.index() == 3 ) == true );
+  BOOST_TEST( ( token1.length() == 5 ) == true );
+
+  BOOST_TEST( ( token2.type() == role::BRANCH ) == true );
+  BOOST_TEST( ( token2.index() == 9 ) == true );
+  BOOST_TEST( ( token2.length() == 8 ) == true );
+
+  BOOST_TEST( ( token3.type() == role::BRANCH ) == true );
+  BOOST_TEST( ( token3.index() == 18 ) == true );
+  BOOST_TEST( ( token3.length() == 7 ) == true );
+#else
+  BOOST_TEST( ( arch.branch_num() == 6 ) == true );
 
   BOOST_TEST( ( token0.type() == role::ROOT ) == true );
   BOOST_TEST( ( token0.index() == 0 ) == true );
@@ -77,11 +102,22 @@ BOOST_AUTO_TEST_CASE( test_case4 ) {
   BOOST_TEST( ( token3.type() == role::BRANCH ) == true );
   BOOST_TEST( ( token3.index() == 13 ) == true );
   BOOST_TEST( ( token3.length() == 3 ) == true );
+#endif
 }
 
 BOOST_AUTO_TEST_CASE( test_case5 ) {
   using namespace path;
 
+#if _WIN32
+  std::string absolute_path( "C:\\Users\\username\\AppData\\Local\\nvim\\init.lua" );
+  branch b0( "C:" ), b1( "Users" ), b2( "username" ), b3( "AppData" );
+  branch b( absolute_path );
+
+  BOOST_TEST( ( b[0] == b0 ) == true );
+  BOOST_TEST( ( b[1] == b1 ) == true );
+  BOOST_TEST( ( b[2] == b2 ) == true );
+  BOOST_TEST( ( b[3] == b3 ) == true );
+#else
   std::string absolute_path( "/usr/include/c++/11/cstdlib" );
   branch b0( "/" ), b1( "usr" ), b2( "include" ), b3( "c++" );
   branch b( absolute_path );
@@ -90,6 +126,7 @@ BOOST_AUTO_TEST_CASE( test_case5 ) {
   BOOST_TEST( ( b[1] == b1 ) == true );
   BOOST_TEST( ( b[2] == b2 ) == true );
   BOOST_TEST( ( b[3] == b3 ) == true );
+#endif
 }
 
 BOOST_AUTO_TEST_SUITE_END()
