@@ -51,29 +51,30 @@ BOOST_AUTO_TEST_CASE( test_case3 ) {
 
 BOOST_AUTO_TEST_CASE( test_case4 ) {
   using namespace path;
+  using namespace path::detail;
 
   std::string absolute_path( "/usr/include/c++/11/cstdlib" );
-  BranchIndex arch( absolute_path );
+  detail::index arch( absolute_path );
   BOOST_TEST( ( arch.branch_num() == 6 ) == true );
 
-  BranchToken token0 = arch[0];
-  BranchToken token1 = arch[1];
-  BranchToken token2 = arch[2];
-  BranchToken token3 = arch[3];
+  branch_token token0 = arch[0];
+  branch_token token1 = arch[1];
+  branch_token token2 = arch[2];
+  branch_token token3 = arch[3];
 
-  BOOST_TEST( ( token0.type() == BranchType::ROOT ) == true );
+  BOOST_TEST( ( token0.type() == role::ROOT ) == true );
   BOOST_TEST( ( token0.index() == 0 ) == true );
   BOOST_TEST( ( token0.length() == 1 ) == true );
 
-  BOOST_TEST( ( token1.type() == BranchType::BRANCH ) == true );
+  BOOST_TEST( ( token1.type() == role::BRANCH ) == true );
   BOOST_TEST( ( token1.index() == 1 ) == true );
   BOOST_TEST( ( token1.length() == 3 ) == true );
 
-  BOOST_TEST( ( token2.type() == BranchType::BRANCH ) == true );
+  BOOST_TEST( ( token2.type() == role::BRANCH ) == true );
   BOOST_TEST( ( token2.index() == 5 ) == true );
   BOOST_TEST( ( token2.length() == 7 ) == true );
 
-  BOOST_TEST( ( token3.type() == BranchType::BRANCH ) == true );
+  BOOST_TEST( ( token3.type() == role::BRANCH ) == true );
   BOOST_TEST( ( token3.index() == 13 ) == true );
   BOOST_TEST( ( token3.length() == 3 ) == true );
 }

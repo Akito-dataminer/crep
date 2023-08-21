@@ -14,7 +14,9 @@
 
 namespace path {
 
-enum class BranchType {
+namespace detail {
+
+enum class role {
   ROOT,
   DELIMITER,
   BRANCH,
@@ -22,39 +24,39 @@ enum class BranchType {
   TYPE_NUM
 };
 
-class BranchToken {
+class branch_token {
 public:
-  explicit BranchToken() = default;
-  constexpr BranchToken( BranchType const type, std::size_t const index, std::size_t const length )
+  explicit branch_token() = default;
+  constexpr branch_token( role const type, std::size_t const index, std::size_t const length )
       : branch_type_( type ), head_index_( index ), length_( length ) {}
-  constexpr BranchToken( BranchToken const & ) = default;
-  constexpr BranchToken &operator=( BranchToken const & ) = default;
-  constexpr BranchToken( BranchToken && ) noexcept = default;
-  constexpr BranchToken &operator=( BranchToken && ) noexcept = default;
-  ~BranchToken() = default;
+  constexpr branch_token( branch_token const & ) = default;
+  constexpr branch_token &operator=( branch_token const & ) = default;
+  constexpr branch_token( branch_token && ) noexcept = default;
+  constexpr branch_token &operator=( branch_token && ) noexcept = default;
+  ~branch_token() = default;
 
-  constexpr BranchType type() const noexcept { return branch_type_; }
+  constexpr role type() const noexcept { return branch_type_; }
   constexpr std::size_t index() const noexcept { return head_index_; }
   constexpr std::size_t length() const noexcept { return length_; }
 
 private:
-  BranchType branch_type_;
+  role branch_type_;
   std::size_t head_index_;
   std::size_t length_;
 };
 
-class BranchIndex {
+class index {
 public:
-  explicit BranchIndex() = default;
-  BranchIndex( std::string const & );
-  BranchIndex( BranchIndex const & ) = default;
-  BranchIndex &operator=( BranchIndex const & ) = default;
-  BranchIndex( BranchIndex && ) noexcept = default;
-  BranchIndex &operator=( BranchIndex && ) noexcept = default;
-  ~BranchIndex() = default;
+  explicit index() = default;
+  index( std::string const & );
+  index( index const & ) = default;
+  index &operator=( index const & ) = default;
+  index( index && ) noexcept = default;
+  index &operator=( index && ) noexcept = default;
+  ~index() = default;
 
-  BranchToken const &operator[]( std::size_t const index ) const noexcept { return token_sequence_[index]; }
-  BranchToken const &at( std::size_t const index ) const {
+  branch_token const &operator[]( std::size_t const index ) const noexcept { return token_sequence_[index]; }
+  branch_token const &at( std::size_t const index ) const {
     if ( index > token_sequence_.size() ) {
       throw std::range_error( "out of range" );
     }
@@ -63,11 +65,13 @@ public:
   std::size_t branch_num() const noexcept { return token_sequence_.size(); }
 
 private:
-  std::vector<BranchToken> token_sequence_;
+  std::vector<branch_token> token_sequence_;
 
-  BranchType type_detection( std::string::const_iterator &, std::size_t const ) const noexcept;
-  std::size_t token_length( std::string::const_iterator &, BranchType const ) const noexcept;
+  role type_detection( std::string::const_iterator &, std::size_t const ) const noexcept;
+  std::size_t token_length( std::string::const_iterator &, role const ) const noexcept;
 };
+
+}  // namespace detail
 
 class branch;
 
@@ -117,9 +121,10 @@ public:
     auto len = index_[index].length();
     return branch( path_element_.substr( i, len ) );
   }
+
 private:
   std::string path_element_;
-  BranchIndex index_;
+  detail::index index_;
 
   // 不正な文字列が使われていないかどうかを調べる
   void isCorrect( std::string const & ) const;

@@ -8,14 +8,16 @@
 
 namespace path {
 
-BranchIndex::BranchIndex( std::string const &branch_str ) {
+namespace detail {
+
+index::index( std::string const &branch_str ) {
   for ( std::string::const_iterator itr = branch_str.begin(); itr != branch_str.end(); ++itr ) {
     std::size_t head_index = std::distance( branch_str.begin(), itr );
-    BranchType token_type = type_detection( itr, head_index );
+    role token_type = type_detection( itr, head_index );
     std::size_t length = 0;
 
     switch ( token_type ) {
-      case BranchType::ROOT:
+      case role::ROOT:
 #if _WIN32
         length = 2;
         ++itr;
@@ -25,10 +27,10 @@ BranchIndex::BranchIndex( std::string const &branch_str ) {
         break;
 #endif
         break;
-      case BranchType::DELIMITER:
+      case role::DELIMITER:
         length = 1;
         break;
-      case BranchType::BRANCH:
+      case role::BRANCH:
         for ( ;; ++itr ) {
           ++length;
           if ( ( *( itr + 1 ) == PATH_SEPARATOR ) || ( ( itr + 1 ) == branch_str.cend() ) ) {
@@ -40,14 +42,14 @@ BranchIndex::BranchIndex( std::string const &branch_str ) {
     }
 
     std::cout << "head_index: " << head_index << std::endl;
-    if ( token_type != BranchType::DELIMITER ) {
+    if ( token_type != role::DELIMITER ) {
       token_sequence_.emplace_back( token_type, head_index, length );
     }
   }
 }
 
-BranchType BranchIndex::type_detection( std::string::const_iterator &itr, std::size_t const index ) const noexcept {
-  BranchType type;
+role index::type_detection( std::string::const_iterator &itr, std::size_t const index ) const noexcept {
+  role type;
 #if _WIN32
   // ただし、このタイプ判定が期待通りに働くためには
   // 必ず2文字目にアクセス可能で、かつブランチの途中でこの関数が呼び出されない
@@ -65,16 +67,18 @@ BranchType BranchIndex::type_detection( std::string::const_iterator &itr, std::s
 #else
   if ( *itr == PATH_SEPARATOR ) {
     if ( index == 0 ) {
-      type = BranchType::ROOT;
+      type = role::ROOT;
     } else {
-      type = BranchType::DELIMITER;
+      type = role::DELIMITER;
     }
   } else {
-    type = BranchType::BRANCH;
+    type = role::BRANCH;
   }
 #endif
   return type;
 }
+
+}  // namespace detail
 
 branch::branch( std::string const &path_element ) : path_element_( path_element ), index_( path_element ) {
   isCorrect( path_element_ );
