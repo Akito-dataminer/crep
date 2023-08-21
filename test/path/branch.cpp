@@ -78,4 +78,17 @@ BOOST_AUTO_TEST_CASE( test_case4 ) {
   BOOST_TEST( ( token3.length() == 3 ) == true );
 }
 
+BOOST_AUTO_TEST_CASE( test_case5 ) {
+  using namespace path;
+
+  std::string absolute_path( "/usr/include/c++/11/cstdlib" );
+  branch b0( "/" ), b1( "usr" ), b2( "include" ), b3( "c++" );
+  branch b( absolute_path );
+
+  BOOST_TEST( ( b[0] == b0 ) == true );
+  BOOST_TEST( ( b[1] == b1 ) == true );
+  BOOST_TEST( ( b[2] == b2 ) == true );
+  BOOST_TEST( ( b[3] == b3 ) == true );
+}
+
 BOOST_AUTO_TEST_SUITE_END()

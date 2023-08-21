@@ -76,7 +76,9 @@ BranchType BranchIndex::type_detection( std::string::const_iterator &itr, std::s
   return type;
 }
 
-branch::branch( std::string const &path_element ) : path_element_( path_element ) { isCorrect( path_element_ ); }
+branch::branch( std::string const &path_element ) : path_element_( path_element ), index_( path_element ) {
+  isCorrect( path_element_ );
+}
 
 [[deprecated]] void branch::modify( std::function<void( std::string & )> modify_function ) {
   modify_function( path_element_ );

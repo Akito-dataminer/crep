@@ -112,8 +112,14 @@ public:
   }
   friend inline bool operator!=( branch const &lhs, branch const &rhs ) noexcept { return !( lhs == rhs ); }
 
+  branch operator[]( std::size_t const index ) const noexcept {
+    auto i = index_[index].index();
+    auto len = index_[index].length();
+    return branch( path_element_.substr( i, len ) );
+  }
 private:
   std::string path_element_;
+  BranchIndex index_;
 
   // 不正な文字列が使われていないかどうかを調べる
   void isCorrect( std::string const & ) const;
