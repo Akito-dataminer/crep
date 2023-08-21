@@ -14,6 +14,54 @@
 
 namespace path {
 
+enum class BranchType {
+  ROOT,
+  DELIMITER,
+  BRANCH,
+
+  TYPE_NUM
+};
+
+class BranchToken {
+public:
+  explicit BranchToken() = default;
+  constexpr BranchToken( BranchType const type, std::size_t const index ) : branch_type_( type ), head_index_( index ) {}
+  constexpr BranchToken( BranchToken const & ) = default;
+  constexpr BranchToken & operator= ( BranchToken const & ) = default;
+  constexpr BranchToken( BranchToken && ) noexcept = default;
+  constexpr BranchToken & operator= ( BranchToken && ) noexcept = default;
+  ~BranchToken() = default;
+
+  constexpr BranchType type() const noexcept { return branch_type_; }
+  constexpr std::size_t index() const noexcept { return head_index_; }
+private:
+  BranchType branch_type_;
+  std::size_t head_index_;
+};
+
+class BranchIndex {
+public:
+  explicit BranchIndex() = default;
+  BranchIndex( std::string const & );
+  BranchIndex( BranchIndex const & ) = default;
+  BranchIndex & operator= ( BranchIndex const & ) = default;
+  BranchIndex( BranchIndex && ) noexcept = default;
+  BranchIndex & operator= ( BranchIndex && ) noexcept = default;
+  ~BranchIndex() = default;
+
+  BranchToken const & operator[]( std::size_t const index ) const noexcept { return token_sequence_[index]; }
+  BranchToken const & at( std::size_t const index ) const {
+    if ( index > token_sequence_.size() ) { throw std::range_error( "out of range" ); }
+    return token_sequence_[index];
+  }
+  std::size_t branch_num() const noexcept { return token_sequence_.size(); }
+private:
+  std::vector<BranchToken> token_sequence_;
+
+  BranchType type_detection( std::string::const_iterator &, std::size_t const ) const noexcept;
+  std::size_t token_length( std::string::const_iterator &, BranchType const ) const noexcept;
+};
+
 class branch;
 
 // Define conditions by concept and metafunction.
