@@ -10,16 +10,16 @@ namespace path {
 namespace detail {
 
 index::index( std::string const &branch_str ) {
-  for ( std::string::const_iterator itr = branch_str.begin(); itr != branch_str.end(); ++itr ) {
-    std::size_t head_index = std::distance( branch_str.begin(), itr );
-    role token_type = type_detection( itr, head_index );
+  for ( std::string::const_iterator citr = branch_str.begin(); citr != branch_str.end(); ++citr ) {
+    std::size_t head_index = std::distance( branch_str.begin(), citr );
+    role token_type = type_detection( citr, head_index );
     std::size_t length = 0;
 
     switch ( token_type ) {
       case role::ROOT:
 #if _WIN32
         length = 2;
-        ++itr;
+        ++citr;
         break;
 #else
         length = 1;
@@ -30,9 +30,9 @@ index::index( std::string const &branch_str ) {
         length = 1;
         break;
       case role::BRANCH:
-        for ( ;; ++itr ) {
+        for ( ;; ++citr ) {
           ++length;
-          if ( ( *( itr + 1 ) == PATH_SEPARATOR ) || ( ( itr + 1 ) == branch_str.cend() ) ) {
+          if ( ( *( citr + 1 ) == PATH_SEPARATOR ) || ( ( citr + 1 ) == branch_str.cend() ) ) {
             break;
           }
         }
