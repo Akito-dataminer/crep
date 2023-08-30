@@ -4,10 +4,11 @@
 
 #pragma once
 
-#include "config/config.hpp"
-#include "util/util.hpp"
-
 #include <vector>
+
+#include "config/config.hpp"
+#include "util/throw_if.hpp"
+#include "util/util.hpp"
 
 namespace path {
 
@@ -42,27 +43,34 @@ private:
   std::size_t length_;
 };
 
-class index {
+class branch_parse {
 public:
-  explicit index() = default;
-  index( std::string const & );
-  index( index const & ) = default;
-  index &operator=( index const & ) = default;
-  index( index && ) noexcept = default;
-  index &operator=( index && ) noexcept = default;
-  ~index() = default;
+  explicit branch_parse() = default;
+  branch_parse( std::string const & );
+  branch_parse( branch_parse const & ) = default;
+  branch_parse &operator=( branch_parse const & ) = default;
+  branch_parse( branch_parse && ) noexcept = default;
+  branch_parse &operator=( branch_parse && ) noexcept = default;
+  ~branch_parse() = default;
 
-  branch_token const &operator[]( std::size_t const index ) const noexcept { return token_sequence_[index]; }
-  branch_token const &at( std::size_t const index ) const {
+  std::string operator[]( std::size_t const index ) const noexcept { return getString( index ); }
+  std::string at( std::size_t const index ) const {
     if ( index > token_sequence_.size() ) {
       throw std::range_error( "out of range" );
     }
-    return token_sequence_[index];
+    util::throw_if<std::range_error>( index > token_sequence_.size(), "out of range" );
+    return getString( index );
   }
   std::size_t branch_num() const noexcept { return token_sequence_.size(); }
 
 private:
+  std::string original_string_;
   std::vector<branch_token> token_sequence_;
+
+  inline std::string getString( std::size_t const index ) const noexcept {
+    auto required_token = token_sequence_[index];
+    return original_string_.substr( required_token.index(), required_token.length() );
+  }
 
   role type_detection( std::string::const_iterator &, std::size_t const ) const;
   std::size_t token_length( std::string::const_iterator &, role const ) const noexcept;

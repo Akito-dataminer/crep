@@ -4,7 +4,7 @@ namespace path {
 
 namespace parse {
 
-index::index( std::string const &branch_str ) {
+branch_parse::branch_parse( std::string const &branch_str ) : original_string_( branch_str ) {
   for ( std::string::const_iterator citr = branch_str.begin(); citr != branch_str.end(); ++citr ) {
     std::size_t head_index = std::distance( branch_str.begin(), citr );
     role token_type = type_detection( citr, head_index );
@@ -41,7 +41,7 @@ index::index( std::string const &branch_str ) {
   }
 }
 
-role index::type_detection( std::string::const_iterator &itr, std::size_t const index ) const {
+role branch_parse::type_detection( std::string::const_iterator &itr, std::size_t const index ) const {
   role type;
 #if _WIN32
   // ただし、このタイプ判定が期待通りに働くためには
