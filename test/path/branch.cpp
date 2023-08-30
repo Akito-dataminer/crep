@@ -101,8 +101,8 @@ BOOST_AUTO_TEST_CASE( test_case4 ) {
 #endif
 
   std::cout << std::endl;
-  for ( auto &&[branch_itr, array_itr] = std::pair{ b.begin(), truncated_single_branches.begin() };
-        branch_itr != b.end(); ++branch_itr, ++array_itr ) {
+  for ( auto [branch_itr, array_itr] = std::pair{ b.begin(), truncated_single_branches.begin() }; branch_itr != b.end();
+        ++branch_itr, ++array_itr ) {
     std::cout << "*array_itr: " << *array_itr << std::endl;
     std::cout << "*branch_itr: " << *branch_itr << std::endl;
     TEST( *branch_itr == *array_itr );
