@@ -4,14 +4,13 @@
 
 #pragma once
 
-#include <functional>
 #include <string>
 #include <type_traits>
 #include <vector>
 
 #include "config/config.hpp"
-#include "util/util.hpp"
 #include "path/parse.hpp"
+#include "util/util.hpp"
 
 namespace path {
 
@@ -43,8 +42,8 @@ public:
   branch &operator=( branch && ) noexcept = default;
   ~branch() = default;
 
-  [[deprecated]] void modify( std::function<void( std::string & )> );
-  std::string to_string() noexcept { return buildBranch(); }
+  // [[deprecated]] void modify( std::function<void( std::string & )> );
+  std::string to_string() const noexcept { return buildBranch(); }
 
   TEMPLATE_HEAD_BRANCH
   inline branch &operator+=( T const &rhs ) noexcept { return this->addBranch<T>( rhs ); }
@@ -57,23 +56,24 @@ public:
   }
   friend inline bool operator!=( branch const &lhs, branch const &rhs ) noexcept { return !( lhs == rhs ); }
 
-  branch operator[]( std::size_t const index ) const noexcept { return branch( path_element_[index] ); }
+  std::string const &operator[]( std::size_t const index ) const noexcept { return path_element_[index]; }
+
+  constexpr inline std::size_t size() const noexcept { return path_element_.size(); }
 
 private:
   std::vector<std::string> path_element_;
 
-  // 不正な文字列が使われていないかどうかを調べる
-  void isCorrect( std::string const & ) const;
   std::string buildBranch() const noexcept;
-  bool isRoot( std::string const & ) const noexcept;
+  constexpr bool isRoot( std::string const & ) const noexcept;
 
   TEMPLATE_HEAD_BRANCH
-  void addBranch( T const &branchable ) noexcept {
+  branch &addBranch( T const &branchable ) noexcept {
     if constexpr ( std::is_same_v<T, branch> ) {
-      path_element_.emplace_back( branchable.path_element_ );
+      path_element_.insert( path_element_.end(), branchable.path_element_.begin(), branchable.path_element_.end() );
     } else {
       path_element_.emplace_back( branchable );
     }
+    return *this;
   }
 };
 
