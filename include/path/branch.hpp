@@ -102,42 +102,37 @@ public:
   ~branch() = default;
 
   [[deprecated]] void modify( std::function<void( std::string & )> );
-  std::string to_string() noexcept { return path_element_; }
-  std::string const &to_string() const noexcept { return path_element_; }
+  std::string to_string() noexcept { return buildBranch(); }
 
   TEMPLATE_HEAD_BRANCH
-  inline branch &operator+=( T const &rhs ) noexcept { return this->connect<T>( rhs ); }
+  inline branch &operator+=( T const &rhs ) noexcept { return this->addBranch<T>( rhs ); }
 
   TEMPLATE_HEAD_BRANCH
   friend inline branch operator+( branch const &lhs, T const &rhs ) noexcept { return branch( lhs ) += rhs; }
 
   friend inline bool operator==( branch const &lhs, branch const &rhs ) noexcept {
-    return lhs.to_string() == rhs.to_string();
+    return lhs.buildBranch() == rhs.buildBranch();
   }
   friend inline bool operator!=( branch const &lhs, branch const &rhs ) noexcept { return !( lhs == rhs ); }
 
-  branch operator[]( std::size_t const index ) const noexcept {
-    auto i = index_[index].index();
-    auto len = index_[index].length();
-    return branch( path_element_.substr( i, len ) );
-  }
+  branch operator[]( std::size_t const index ) const noexcept { return branch( path_element_[index] ); }
 
 private:
-  std::string path_element_;
+  std::vector<std::string> path_element_;
   detail::index index_;
 
   // 不正な文字列が使われていないかどうかを調べる
   void isCorrect( std::string const & ) const;
+  std::string buildBranch() const noexcept;
+  bool isRoot( std::string const & ) const noexcept;
 
   TEMPLATE_HEAD_BRANCH
-  branch &connect( T const &rhs ) noexcept {
-    path_element_ += PATH_SEPARATOR;
+  void addBranch( T const &branchable ) noexcept {
     if constexpr ( std::is_same_v<T, branch> ) {
-      path_element_ += rhs.path_element_;
+      path_element_.emplace_back( branchable.path_element_ );
     } else {
-      path_element_ += rhs;
+      path_element_.emplace_back( branchable );
     }
-    return *this;
   }
 };
 
