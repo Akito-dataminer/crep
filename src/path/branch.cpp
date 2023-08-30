@@ -1,5 +1,6 @@
 #include "path/branch.hpp"
 
+#include <algorithm>
 #include <iterator>
 
 #include "config/config.hpp"
@@ -14,6 +15,15 @@ branch::branch( std::string const &path_element ) : path_element_( 0 ) {
   for ( size_t i = 0; i < branch_num; ++i ) {
     path_element_.emplace_back( parser[i] );
   }
+}
+
+void branch::truncate( std::string const &truncate_branch ) noexcept {
+  auto truncate_condition = [&truncate_branch]( std::string const &value ) -> bool { return value == truncate_branch; };
+
+  decltype( path_element_ )::iterator new_end_itr =
+      std::remove_if( path_element_.begin(), path_element_.end(), truncate_condition );
+
+  path_element_.erase( new_end_itr, path_element_.end() );
 }
 
 std::string branch::buildBranch() const noexcept {

@@ -44,6 +44,7 @@ public:
 
   // [[deprecated]] void modify( std::function<void( std::string & )> );
   std::string to_string() const noexcept { return buildBranch(); }
+  void truncate( std::string const & ) noexcept;
 
   TEMPLATE_HEAD_BRANCH
   inline branch &operator+=( T const &rhs ) noexcept { return this->addBranch<T>( rhs ); }

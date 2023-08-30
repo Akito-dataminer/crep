@@ -1,9 +1,11 @@
 #include "path/branch.hpp"
 
+#include <array>
 #include <boost/test/unit_test.hpp>
 #include <iostream>
 #include <string>
 #include <type_traits>
+#include <utility>
 
 #define TEST( CONDITION ) BOOST_TEST( ( CONDITION ) == true )
 #if _WIN32
@@ -78,6 +80,33 @@ BOOST_AUTO_TEST_CASE( test_case3 ) {
   TEST( b[4] == "11" );
   TEST( b[5] == "cstdlib" );
 #endif
+}
+
+BOOST_AUTO_TEST_CASE( test_case4 ) {
+  using namespace path;
+
+#if _WIN32
+  std::string absolute_path( "C:\\Users\\username\\AppData\\Local\\nvim\\init.lua" );
+  std::array<std::string, 6> truncated_single_branches = { "C:", "Users", "username", "AppData", "Local", "init.lua" };
+#else
+  std::string absolute_path( "/usr/include/c++/11/cstdlib" );
+  std::array<std::string, 5> truncated_single_branches = { "/", "usr", "include", "c++", "cstdlib" };
+#endif
+  branch b( absolute_path );
+
+#if _WIN32
+  b.truncate( "nvim" );
+#else
+  b.truncate( "11" );
+#endif
+
+  std::cout << std::endl;
+  for ( auto &&[branch_itr, array_itr] = std::pair{ b.begin(), truncated_single_branches.begin() };
+        branch_itr != b.end(); ++branch_itr, ++array_itr ) {
+    std::cout << "*array_itr: " << *array_itr << std::endl;
+    std::cout << "*branch_itr: " << *branch_itr << std::endl;
+    TEST( *branch_itr == *array_itr );
+  }
 }
 
 BOOST_AUTO_TEST_SUITE_END()
