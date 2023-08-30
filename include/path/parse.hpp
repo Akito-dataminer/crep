@@ -61,7 +61,7 @@ public:
     util::throw_if<std::range_error>( index > token_sequence_.size(), "out of range" );
     return getString( index );
   }
-  std::size_t branch_num() const noexcept { return token_sequence_.size(); }
+  std::size_t size() const noexcept { return token_sequence_.size(); }
 
 private:
   std::string original_string_;
