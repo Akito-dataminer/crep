@@ -58,13 +58,13 @@ public:
 
   std::string const &operator[]( std::size_t const index ) const noexcept { return path_element_[index]; }
 
-  constexpr inline std::size_t size() const noexcept { return path_element_.size(); }
+  inline std::size_t size() const noexcept { return path_element_.size(); }
 
 private:
   std::vector<std::string> path_element_;
 
   std::string buildBranch() const noexcept;
-  constexpr bool isRoot( std::string const & ) const noexcept;
+  bool isRoot( std::string const & ) const noexcept;
 
   TEMPLATE_HEAD_BRANCH
   branch &addBranch( T const &branchable ) noexcept {

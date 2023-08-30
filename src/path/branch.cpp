@@ -44,7 +44,7 @@ std::string branch::buildBranch() const noexcept {
   return branch_tmp;
 }
 
-constexpr bool branch::isRoot( std::string const &maybe_root ) const noexcept {
+bool branch::isRoot( std::string const &maybe_root ) const noexcept {
   bool is_root = false;
 #ifdef _WIN32
   if ( maybe_root[0] >= 'A' && maybe_root[0] <= 'Z' ) {
