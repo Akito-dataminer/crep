@@ -97,7 +97,7 @@ BOOST_AUTO_TEST_CASE( test_case4 ) {
 #if _WIN32
   b.truncate( "nvim" );
 #else
-  b.truncate( "11" );
+  b.truncate( std::string( "11/cstdlib" ) );
 #endif
 
   std::cout << std::endl;
