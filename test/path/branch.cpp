@@ -3,10 +3,10 @@
 #include <array>
 #include <boost/test/unit_test.hpp>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 #include <type_traits>
 #include <utility>
-#include <stdexcept>
 
 #define TEST( CONDITION ) BOOST_TEST( ( CONDITION ) == true )
 
