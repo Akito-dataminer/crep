@@ -12,9 +12,11 @@
 
 #if _WIN32
 #  define TEST_ABSOLUTE_PATH "C:\\Users\\username\\AppData\\Local\\nvim\\init.lua"
+#  define TEST_RELATIVE_PATH ".\\build\\src\\crep"
 #  define BRANCH_LIST "C:", "Users", "username", "AppData", "Local", "nvim", "init.lua"
 #else
 #  define TEST_ABSOLUTE_PATH "/usr/include/c++/11/cstdlib"
+#  define TEST_RELATIVE_PATH "./build/src/crep"
 #  define BRANCH_LIST "/", "usr", "include", "c++", "11", "cstdlib"
 #endif
 
@@ -33,9 +35,7 @@ BOOST_AUTO_TEST_CASE( test_case2 ) {
   branch j1( "a" );
   branch const j2( "a" ), j3( "b" );
   branch const connected1( std::string( "a" ) + DELIMITER + std::string( "b" ) );
-  branch const connected2(
-      std::string( "a" ) + DELIMITER + std::string( "b" ) + DELIMITER + std::string( "c" )
-  );
+  branch const connected2( std::string( "a" ) + DELIMITER + std::string( "b" ) + DELIMITER + std::string( "c" ) );
   std::string str1( "c" );
 
   TEST( j1 == j2 );
@@ -157,6 +157,21 @@ BOOST_AUTO_TEST_CASE( test_case4_branch_truncate_error ) {
 
   branch b( std::string( TEST_ABSOLUTE_PATH ) );
   BOOST_CHECK_THROW( b.truncate( branch( TRUNCATE_BRANCH ) ), std::invalid_argument );
+}
+
+BOOST_AUTO_TEST_CASE( test_case5 ) {
+  using namespace path;
+  std::cout << std::endl;
+
+  std::string relative_path( TEST_RELATIVE_PATH );
+  branch b( relative_path );
+
+  std::cout << "b.to_string(): " << b.to_string() << std::endl;
+  TEST( relative_path == b.to_string() );
+  TEST( b[0] == "." );
+  TEST( b[1] == "build" );
+  TEST( b[2] == "src" );
+  TEST( b[3] == "crep" );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
