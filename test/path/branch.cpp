@@ -12,9 +12,11 @@
 
 #if _WIN32
 #  define TEST_ABSOLUTE_PATH "C:\\Users\\username\\AppData\\Local\\nvim\\init.lua"
+#  define TEST_RELATIVE_PATH ".\\build\\src\\crep"
 #  define BRANCH_LIST "C:", "Users", "username", "AppData", "Local", "nvim", "init.lua"
 #else
 #  define TEST_ABSOLUTE_PATH "/usr/include/c++/11/cstdlib"
+#  define TEST_RELATIVE_PATH "./build/src/crep"
 #  define BRANCH_LIST "/", "usr", "include", "c++", "11", "cstdlib"
 #endif
 
@@ -161,7 +163,7 @@ BOOST_AUTO_TEST_CASE( test_case5 ) {
   using namespace path;
   std::cout << std::endl;
 
-  std::string relative_path( "./build/src/crep" );
+  std::string relative_path( TEST_RELATIVE_PATH );
   branch b( relative_path );
 
   std::cout << "b.to_string(): " << b.to_string() << std::endl;
