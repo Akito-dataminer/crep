@@ -57,21 +57,13 @@ std::string branch::buildBranch() const noexcept {
     if ( citr == path_element_.cbegin() ) {
       branch_tmp += ( *citr );
       continue;
-    }
-    if ( isRoot( *citr ) == true ) {
-      branch_tmp += ( *citr );
     } else {
 #ifdef _WIN32
       branch_tmp += DELIMITER;
       branch_tmp += ( *citr );
 #elif __linux__
-      if ( citr != path_element_.cbegin() ) {
-        if ( isRoot( *( citr - 1 ) ) == true ) {
-          branch_tmp += ( *citr );
-        } else {
-          branch_tmp += DELIMITER;
-          branch_tmp += ( *citr );
-        }
+      if ( isRoot( *( citr - 1 ) ) == true ) {
+        branch_tmp += ( *citr );
       } else {
         branch_tmp += DELIMITER;
         branch_tmp += ( *citr );
