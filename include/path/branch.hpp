@@ -34,6 +34,12 @@ STATIC_CONSTEXPR bool const is_convertible_to_branch = std::is_convertible_v<T, 
 
 class branch {
 public:
+  using container_type = std::vector<std::string>;
+  using iterator = container_type::iterator;
+  using const_iterator = container_type::const_iterator;
+  using reverse_iterator = container_type::reverse_iterator;
+  using const_reverse_iterator = container_type::const_reverse_iterator;
+
   explicit branch() = delete;
   branch( std::string const & );
   branch( branch const & ) = default;
@@ -44,6 +50,7 @@ public:
 
   // [[deprecated]] void modify( std::function<void( std::string & )> );
   std::string to_string() const noexcept { return buildBranch(); }
+  void truncate( branch const &truncate_target );
 
   TEMPLATE_HEAD_BRANCH
   inline branch &operator+=( T const &rhs ) noexcept { return this->addBranch<T>( rhs ); }
@@ -59,6 +66,15 @@ public:
   std::string const &operator[]( std::size_t const index ) const noexcept { return path_element_[index]; }
 
   inline std::size_t size() const noexcept { return path_element_.size(); }
+
+  iterator begin() noexcept { return path_element_.begin(); }
+  iterator end() noexcept { return path_element_.end(); }
+  const_iterator cbegin() const noexcept { return path_element_.cbegin(); }
+  const_iterator cend() const noexcept { return path_element_.cend(); }
+  reverse_iterator rbegin() noexcept { return path_element_.rbegin(); }
+  reverse_iterator rend() noexcept { return path_element_.rend(); }
+  const_reverse_iterator crbegin() const noexcept { return path_element_.crbegin(); }
+  const_reverse_iterator crcend() const noexcept { return path_element_.crend(); }
 
 private:
   std::vector<std::string> path_element_;
