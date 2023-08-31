@@ -131,7 +131,7 @@ BOOST_AUTO_TEST_CASE( test_case4_branch_truncate_multiple ) {
   std::vector<std::string> truncated_single_branches = { CORRECT_BRANCH_LIST };
 
 #if _WIN32
-  b.truncate( "Local\\nvim" );
+  b.truncate( std::string( "Local\\nvim" ) );
 #else
   b.truncate( std::string( "c++/11" ) );
 #endif
