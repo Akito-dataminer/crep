@@ -7,10 +7,10 @@
 
 #define TEST( CONDITION ) BOOST_TEST( ( CONDITION ) == true )
 #if _WIN32
-#  define TEST_PATH "C:\\Users\\username\\AppData\\Local\\nvim\\init.lua"
+#  define TEST_ABSOLUTE_PATH "C:\\Users\\username\\AppData\\Local\\nvim\\init.lua"
 #  define BRANCH_LIST "C:", "Users", "username", "AppData", "Local", "nvim", "init.lua"
 #else
-#  define TEST_PATH "/usr/include/c++/11/cstdlib"
+#  define TEST_ABSOLUTE_PATH "/usr/include/c++/11/cstdlib"
 #  define BRANCH_LIST "/", "usr", "include", "c++", "11", "cstdlib"
 #endif
 
@@ -55,7 +55,7 @@ BOOST_AUTO_TEST_CASE( test_case3 ) {
   using namespace path;
   std::cout << std::endl;
 
-  std::string absolute_path( TEST_PATH );
+  std::string absolute_path( TEST_ABSOLUTE_PATH );
   branch b( absolute_path );
 
   std::cout << "b.to_string(): " << b.to_string() << std::endl;
