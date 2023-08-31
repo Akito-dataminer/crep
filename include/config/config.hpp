@@ -25,9 +25,9 @@
 #ifdef _WIN32
 STATIC_CONSTEXPR char const *GET_ENVIRONMENT_VARIABLE = "LocalAppData";
 STATIC_CONSTEXPR char const *APPEND_DIRECTORY = "/crep/.cpp_skeleton";
-STATIC_CONSTEXPR char const PATH_SEPARATOR = '\\';
+STATIC_CONSTEXPR char const DELIMITER = '\\';
 #elif __linux__
 STATIC_CONSTEXPR char const *GET_ENVIRONMENT_VARIABLE = "HOME";
 STATIC_CONSTEXPR char const *APPEND_DIRECTORY = "/.config/crep/.cpp_skeleton";
-STATIC_CONSTEXPR char const PATH_SEPARATOR = '/';
+STATIC_CONSTEXPR char const DELIMITER = '/';
 #endif

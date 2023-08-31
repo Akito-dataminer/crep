@@ -32,9 +32,9 @@ BOOST_AUTO_TEST_CASE( test_case2 ) {
 
   branch j1( "a" );
   branch const j2( "a" ), j3( "b" );
-  branch const connected1( std::string( "a" ) + PATH_SEPARATOR + std::string( "b" ) );
+  branch const connected1( std::string( "a" ) + DELIMITER + std::string( "b" ) );
   branch const connected2(
-      std::string( "a" ) + PATH_SEPARATOR + std::string( "b" ) + PATH_SEPARATOR + std::string( "c" )
+      std::string( "a" ) + DELIMITER + std::string( "b" ) + DELIMITER + std::string( "c" )
   );
   std::string str1( "c" );
 

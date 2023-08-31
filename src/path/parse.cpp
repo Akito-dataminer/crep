@@ -27,7 +27,7 @@ branch_parse::branch_parse( std::string const &branch_str ) : original_string_( 
       case role::BRANCH:
         for ( ;; ++citr ) {
           ++length;
-          if ( ( *( citr + 1 ) == PATH_SEPARATOR ) || ( ( citr + 1 ) == branch_str.cend() ) ) {
+          if ( ( *( citr + 1 ) == DELIMITER ) || ( ( citr + 1 ) == branch_str.cend() ) ) {
             break;
           }
         }
@@ -56,13 +56,13 @@ role branch_parse::type_detection( std::string::const_iterator &itr, std::size_t
       type = role::TYPE_NUM;
       throw std::invalid_argument( "A character was used that should not be in a branch." );
     }
-  } else if ( *itr == PATH_SEPARATOR ) {
+  } else if ( *itr == DELIMITER ) {
     type = role::DELIMITER;
   } else {
     type = role::BRANCH;
   }
 #else
-  if ( *itr == PATH_SEPARATOR ) {
+  if ( *itr == DELIMITER ) {
     if ( index == 0 ) {
       type = role::ROOT;
     } else {

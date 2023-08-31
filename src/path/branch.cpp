@@ -54,22 +54,26 @@ void branch::truncate( branch const &truncate_branch ) {
 std::string branch::buildBranch() const noexcept {
   std::string branch_tmp( "" );
   for ( container_type::const_iterator citr = path_element_.cbegin(); citr != path_element_.cend(); ++citr ) {
+    if ( citr == path_element_.cbegin() ) {
+      branch_tmp += ( *citr );
+      continue;
+    }
     if ( isRoot( *citr ) == true ) {
       branch_tmp += ( *citr );
     } else {
 #ifdef _WIN32
-      branch_tmp += PATH_SEPARATOR;
+      branch_tmp += DELIMITER;
       branch_tmp += ( *citr );
 #elif __linux__
       if ( citr != path_element_.cbegin() ) {
         if ( isRoot( *( citr - 1 ) ) == true ) {
           branch_tmp += ( *citr );
         } else {
-          branch_tmp += PATH_SEPARATOR;
+          branch_tmp += DELIMITER;
           branch_tmp += ( *citr );
         }
       } else {
-        branch_tmp += PATH_SEPARATOR;
+        branch_tmp += DELIMITER;
         branch_tmp += ( *citr );
       }
 #endif
