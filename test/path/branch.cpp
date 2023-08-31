@@ -6,8 +6,10 @@
 #include <string>
 #include <type_traits>
 #include <utility>
+#include <stdexcept>
 
 #define TEST( CONDITION ) BOOST_TEST( ( CONDITION ) == true )
+
 #if _WIN32
 #  define TEST_ABSOLUTE_PATH "C:\\Users\\username\\AppData\\Local\\nvim\\init.lua"
 #  define BRANCH_LIST "C:", "Users", "username", "AppData", "Local", "nvim", "init.lua"
@@ -82,31 +84,79 @@ BOOST_AUTO_TEST_CASE( test_case3 ) {
 #endif
 }
 
-BOOST_AUTO_TEST_CASE( test_case4 ) {
+BOOST_AUTO_TEST_CASE( test_case4_branch_truncate_single ) {
+#undef CORRECT_BRANCH_LIST
+#undef TRUNCATE_BRANCH
+#if _WIN32
+#  define CORRECT_BRANCH_LIST "C:", "Users", "username", "AppData", "Local", "init.lua"
+#  define TRUNCATE_BRANCH "nvim"
+#else
+#  define CORRECT_BRANCH_LIST "/", "usr", "include", "c++", "cstdlib"
+#  define TRUNCATE_BRANCH "11"
+#endif
+
   using namespace path;
 
+  std::string absolute_path( TEST_ABSOLUTE_PATH );
+  branch b( absolute_path );
+  std::vector<std::string> truncated_single_branches = { CORRECT_BRANCH_LIST };
+
+  b.truncate( std::string( TRUNCATE_BRANCH ) );
+
+  std::cout << std::endl;
+  for ( auto [branch_itr, correct_itr] = std::pair{ b.begin(), truncated_single_branches.begin() };
+        branch_itr != b.end(); ++branch_itr, ++correct_itr ) {
+    std::cout << "*array_itr: " << *correct_itr << std::endl;
+    std::cout << "*branch_itr: " << *branch_itr << std::endl;
+    TEST( *branch_itr == *correct_itr );
+  }
+}
+
+BOOST_AUTO_TEST_CASE( test_case4_branch_truncate_multiple ) {
+#undef CORRECT_BRANCH_LIST
+#undef TRUNCATE_BRANCH
 #if _WIN32
-  std::string absolute_path( "C:\\Users\\username\\AppData\\Local\\nvim\\init.lua" );
-  std::array<std::string, 6> truncated_single_branches = { "C:", "Users", "username", "AppData", "Local", "init.lua" };
+#  define CORRECT_BRANCH_LIST "C:", "Users", "username", "AppData", "init.lua"
+#  define TRUNCATE_BRANCH "Local\\nvim"
 #else
-  std::string absolute_path( "/usr/include/c++/11/cstdlib" );
-  std::array<std::string, 5> truncated_single_branches = { "/", "usr", "include", "c++", "cstdlib" };
+#  define CORRECT_BRANCH_LIST "/", "usr", "include", "cstdlib"
+#  define TRUNCATE_BRANCH "c++/11"
 #endif
+
+  using namespace path;
+
+  std::string absolute_path( TEST_ABSOLUTE_PATH );
   branch b( absolute_path );
 
+  std::vector<std::string> truncated_single_branches = { CORRECT_BRANCH_LIST };
+
 #if _WIN32
-  b.truncate( "nvim" );
+  b.truncate( "Local\\nvim" );
 #else
-  b.truncate( std::string( "11/cstdlib" ) );
+  b.truncate( std::string( "c++/11" ) );
 #endif
 
   std::cout << std::endl;
-  for ( auto [branch_itr, array_itr] = std::pair{ b.begin(), truncated_single_branches.begin() }; branch_itr != b.end();
-        ++branch_itr, ++array_itr ) {
-    std::cout << "*array_itr: " << *array_itr << std::endl;
+  for ( auto [branch_itr, correct_itr] = std::pair{ b.begin(), truncated_single_branches.begin() };
+        branch_itr != b.end(); ++branch_itr, ++correct_itr ) {
+    std::cout << "*array_itr: " << *correct_itr << std::endl;
     std::cout << "*branch_itr: " << *branch_itr << std::endl;
-    TEST( *branch_itr == *array_itr );
+    TEST( *branch_itr == *correct_itr );
   }
+}
+
+BOOST_AUTO_TEST_CASE( test_case4_branch_truncate_error ) {
+#undef TRUNCATE_BRANCH
+#if _WIN32
+#  define TRUNCATE_BRANCH "Local\\nvim\\init.lua\\length_over"
+#else
+#  define TRUNCATE_BRANCH "c++/11/cstdlib/error/length_over"
+#endif
+
+  using namespace path;
+
+  branch b( std::string( TEST_ABSOLUTE_PATH ) );
+  BOOST_CHECK_THROW( b.truncate( branch( TRUNCATE_BRANCH ) ), std::invalid_argument );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
