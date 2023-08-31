@@ -127,20 +127,16 @@ However, this method may make it difficult to control the contents of the file f
 
 このプログラムを利用したければ、現状ではソースコードからビルドしていただくより他にない。
 
-もしもビルドしたければ、ソースコードをgit cloneなどでダウンロードした後、
-このプロジェクトのルートディレクトリで次のようなコマンドを入力してほしい。
-
-以下のいずれかのコマンドを実行すると、
-プロジェクトのルートディレクトリに置いているbuild.cmakeがスクリプトモードで実行される。
-
-すると、プロジェクトルートに新しくbuild/というディレクトリが作られる。
-そのbuild/をさらに進んだ先にある<project_root>/build/src/crepというファイルが実行ファイルとなっている
-(ただし、<project_root>は人によって様々だろうから、適宜自分の環境に合わせて読み変えてほしい)。
+次の節のいずれかのコマンドを実行すると、
+プロジェクトルートに新しくbuild/というディレクトリが作られる。
+そのbuild/以下の/src/crepというファイルが実行ファイルとなっている。
 crepを他のコマンドと同じく、"crep"とコマンドラインに入力しただけで実行してほしければ、
-<project_root>/build/src/というディレクトリを環境変数に登録すればいい。
+<project_root>/build/src/というディレクトリを環境変数に登録すればいい
+(ただし、<project_root>は人によって様々だろうから、適宜自分の環境に合わせて読み変えてほしい)。
 もしくは、環境変数に登録されているディレクトリに、
 <project_root>/build/src/crepへのリンクを作ればいい。
 
+## How to build this project?
 ### If you want to use libstdc++( libstdc++を利用してビルドしたい場合 )
 cmake -Dslib=libstdc++ -P build.cmake
 もしくは、
