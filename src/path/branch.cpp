@@ -53,8 +53,7 @@ void branch::truncate( branch const &truncate_branch ) {
 
 std::string branch::buildBranch() const noexcept {
   std::string branch_tmp( "" );
-  for ( container_type::const_iterator citr = path_element_.cbegin(); citr != path_element_.cend();
-        ++citr ) {
+  for ( container_type::const_iterator citr = path_element_.cbegin(); citr != path_element_.cend(); ++citr ) {
     if ( isRoot( *citr ) == true ) {
       branch_tmp += ( *citr );
     } else {
