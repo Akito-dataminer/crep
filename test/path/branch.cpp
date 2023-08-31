@@ -159,4 +159,19 @@ BOOST_AUTO_TEST_CASE( test_case4_branch_truncate_error ) {
   BOOST_CHECK_THROW( b.truncate( branch( TRUNCATE_BRANCH ) ), std::invalid_argument );
 }
 
+BOOST_AUTO_TEST_CASE( test_case5 ) {
+  using namespace path;
+  std::cout << std::endl;
+
+  std::string relative_path( "./build/src/crep" );
+  branch b( relative_path );
+
+  std::cout << "b.to_string(): " << b.to_string() << std::endl;
+  TEST( relative_path == b.to_string() );
+  TEST( b[0] == "." );
+  TEST( b[1] == "build" );
+  TEST( b[2] == "src" );
+  TEST( b[3] == "crep" );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
