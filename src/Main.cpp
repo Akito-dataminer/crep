@@ -13,6 +13,7 @@
 #include <vector>
 
 int main( int const argc, char const *argv[] ) {
+  int return_value = 0;
   try {
     // スケルトンプログラムを保管しているディレクトリを設定する。
     char const *environment_variable = std::getenv( GET_ENVIRONMENT_VARIABLE );
@@ -53,9 +54,10 @@ int main( int const argc, char const *argv[] ) {
         std::filesystem::copy( itr.first, itr.second );
       }
     }
-
-    return 0;
+    return_value = 0;
   } catch ( std::exception &e ) {
     std::cerr << e.what() << std::endl;
+    return_value = -1;
   }
+  return return_value;
 }
