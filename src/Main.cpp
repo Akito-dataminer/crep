@@ -2,6 +2,7 @@
  ****************************************/
 
 #include "config/config.hpp"
+#include "path/branch.hpp"
 #include "util/path.hpp"
 #include "util/throw_if.hpp"
 
@@ -22,15 +23,16 @@ int main( int const argc, char const *argv[] ) {
                                              std::string( GET_ENVIRONMENT_VARIABLE ) +
                                              std::string( "is not able to be read." )
     );
-    std::string skeleton_dir = std::string( environment_variable ) + std::string( APPEND_DIRECTORY );
 
+    path::branch skeleton_dir( std::string( environment_variable ) + std::string( APPEND_DIRECTORY ) );
     util::throw_if<std::runtime_error>(
-        !std::filesystem::is_directory( skeleton_dir ),
-        std::string( "There is NOT project skeleton in " ) + skeleton_dir
+        !std::filesystem::is_directory( skeleton_dir.to_string() ),
+        std::string( "There is NOT project skeleton in " ) + skeleton_dir.to_string()
     );
+    std::cout << "skeleton_dir.to_string: " << skeleton_dir.to_string() << std::endl;
 
-    std::vector<std::string> const original_paths = path::recursive_scan_directory( skeleton_dir );
-    int skeleton_dir_length = skeleton_dir.length() + 1;  // skeleton_dirは、末尾が'/'になっていないので、+1しておく
+    std::vector<std::string> const original_paths = path::recursive_scan_directory( skeleton_dir.to_string() );
+    int skeleton_dir_length = skeleton_dir.to_string().length() + 1;  // skeleton_dirは、末尾が'/'になっていないので、+1しておく
     std::vector<std::pair<std::string, std::string>> source_to_dest;
 
     for ( auto itr : original_paths ) {
