@@ -145,6 +145,11 @@ cmake -P build.cmake
 ### If you want to use libc++( libc++を利用してビルドしたい場合 )
 cmake -Dslib=libc++ -P build.cmake
 
-## ビルド時の注意事項
+## How to use this software?( このツールの使い方 )
+1. crep(実行ファイル)へのパスを通す。
+2. Linux(Ubuntu)なら~/.config/crep/template/以下、Windowsなら%LocalAppData%\crep\template以下にプロジェクトのテンプレートを保存しておく
+3. crep <project_name> というコマンドを実行すると、カレントディレクトリに<project_name>という名前のディレクトリが作られ、その中にテンプレートがコピーされる。
+
+## Operating environment( 動作環境 )
 このソフトウェアは、Ubuntu 22.04LTS上では問題なく動作することを確認している。
 しかし、他の環境でも動作するかどうかは分からない。
