@@ -31,31 +31,50 @@ int main( int const argc, char const *argv[] ) {
     );
     std::cout << "skeleton_dir.to_string: " << skeleton_dir.to_string() << std::endl;
 
-    std::vector<std::string> const original_paths = path::recursive_scan_directory( skeleton_dir.to_string() );
-    int skeleton_dir_length = skeleton_dir.to_string().length() + 1;  // skeleton_dirは、末尾が'/'になっていないので、+1しておく
-    std::vector<std::pair<std::string, std::string>> source_to_dest;
+    std::vector<path::branch> const original_branches = path::recursive_scan_directory( skeleton_dir );
+    std::vector<std::pair<path::branch, path::branch>> source_to_dest;
+    std::vector<path::branch> const ignore_list{
+        path::branch( ".git" ), path::branch( "build" ), path::branch( "LICENSE.md" ) };
 
-    for ( auto itr : original_paths ) {
-      std::string dest_name = itr.substr( skeleton_dir_length );
-      if ( dest_name.substr( 0, 4 ) == ".git" ) {
+    auto ignore_branch = [&ignore_list]( path::branch const &maybe_ignored ) -> bool {
+      using size_type = path::branch::index_type::value_type;
+
+      bool is_member_of_ignore_list = false;
+      for ( decltype( ignore_list )::const_iterator citr = ignore_list.cbegin(); citr != ignore_list.cend(); ++citr ) {
+        if ( static_cast<size_type>( maybe_ignored.contains( *citr ) ) != crep::npos_v<size_type> ) {
+          is_member_of_ignore_list = true;
+          break;
+        }
+      }
+      return is_member_of_ignore_list;
+    };
+
+    for ( decltype( original_branches )::const_iterator citr = original_branches.cbegin();
+          citr != original_branches.end(); ++citr ) {
+      if ( ignore_branch( *citr ) ) {
         continue;
       }
-      if ( dest_name.substr( 0, 6 ) == "build/" ) {
-        continue;
-      }
-      if ( dest_name.substr( 0, 7 ) == "LICENSE" ) {
-        continue;
-      }
-      source_to_dest.emplace_back( itr, dest_name );
+
+      path::branch dest_name( "./" );
+      path::branch original_branch = *citr;
+
+      original_branch.truncate( skeleton_dir );
+      dest_name += original_branch;
+
+      std::cout << citr->to_string() << "  ->  " << dest_name.to_string() << std::endl;
+
+      source_to_dest.emplace_back( *citr, dest_name );
     }
 
-    for ( auto itr : source_to_dest ) {
-      if ( std::filesystem::is_directory( itr.first ) ) {
-        std::filesystem::create_directory( itr.second );
-      } else {
-        std::filesystem::copy( itr.first, itr.second );
-      }
-    }
+    // for ( auto itr : source_to_dest ) {
+    //   if ( std::filesystem::is_directory( static_cast<std::filesystem::path>( itr.first ) ) ) {
+    //     std::filesystem::create_directory( static_cast<std::filesystem::path>( itr.second ) );
+    //   } else {
+    //     std::filesystem::copy(
+    //         static_cast<std::filesystem::path>( itr.first ), static_cast<std::filesystem::path>( itr.second )
+    //     );
+    //   }
+    // }
     return_value = 0;
   } catch ( std::exception &e ) {
     std::cerr << e.what() << std::endl;
