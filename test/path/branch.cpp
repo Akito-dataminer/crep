@@ -199,7 +199,7 @@ BOOST_AUTO_TEST_CASE( test_case6_contain ) {
 
   std::cout << "src/crep index: " << b.contains( branch( "src/crep" ) ) << std::endl;
   TEST( static_cast<std::size_t>( b.contains( branch( "crep" ) ) ) == 3 );
-  TEST( static_cast<std::size_t> ( b.contains( branch( "src/crep" ) ) ) == 2 );
+  TEST( static_cast<std::size_t> ( b.contains( branch( std::string( "src" ) + DELIMITER + std::string( "crep" ) ) ) ) == 2 );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
