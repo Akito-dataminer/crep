@@ -1,4 +1,4 @@
-#include "iterator/npos.hpp"
+#include "iterator/index_t.hpp"
 
 #include <boost/test/unit_test.hpp>
 #include <utility>
