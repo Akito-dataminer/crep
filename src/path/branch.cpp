@@ -113,7 +113,7 @@ bool branch::isRoot( container_type::const_iterator maybe_point_root ) const noe
   container_type::difference_type index = std::distance( path_element_.begin(), maybe_point_root );
   if ( index == 0 ) {
 #ifdef _WIN32
-    if ( *maybe_root.size() == 2 ) {
+    if ( maybe_root.size() == 2 ) {
       if ( maybe_root[0] >= 'A' && maybe_root[0] <= 'Z' ) {
         if ( maybe_root[1] == ':' ) {
           is_root = true;
