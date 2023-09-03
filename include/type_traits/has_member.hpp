@@ -11,7 +11,7 @@
   template <typename MaybeHasTheType>                                  \
   struct CLASS_NAME {                                                  \
   private:                                                             \
-    template <typename TargetT, typename = decltype( TargetT::TYPE )>  \
+    template <typename TargetT, typename = typename TargetT::TYPE>     \
     STATIC_CONSTEXPR auto check( TargetT const & ) -> std::true_type;  \
     STATIC_CONSTEXPR auto check( ... ) -> std::false_type;             \
                                                                        \
