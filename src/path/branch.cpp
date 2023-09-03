@@ -68,7 +68,7 @@ branch::index_type branch::contains( branch const &maybe_contain ) const noexcep
   };
 
   for ( const_iterator citr = path_element_.cbegin(); citr != element_end; ++citr ) {
-    if ( maybe_contain.size() > static_cast<std::size_t>( std::distance( citr, element_end ) ) ) {
+    if ( maybe_contain.size() >= static_cast<std::size_t>( std::distance( citr, element_end ) ) ) {
       match_begin = element_end;
     }
     if ( branch_compare( citr ) ) {
