@@ -209,4 +209,20 @@ BOOST_AUTO_TEST_CASE( test_case6_contain ) {
   );
 }
 
+BOOST_AUTO_TEST_CASE( test_case6_not_contain ) {
+  using namespace path;
+  using size_type = path::branch::index_type::value_type;
+  std::cout << std::endl;
+
+  std::string branch_string( TEST_RELATIVE_PATH );
+  branch b( branch_string );
+
+  std::cout << "not_contain index: " << b.contains( branch( "not_contain" ) ) << std::endl;
+  std::cout << "crep::npos_v: " << crep::npos_v<size_type> << std::endl;
+  std::cout << "static_cast<size_type>( crep::index_t<size_type>() ): "
+            << static_cast<size_type>( crep::index_t<size_type>() ) << std::endl;
+  TEST( static_cast<size_type>( crep::index_t<size_type>() ) == crep::npos_v<size_type> );
+  TEST( static_cast<size_type>( b.contains( branch( "not_contain" ) ) ) == crep::npos_v<size_type> );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
