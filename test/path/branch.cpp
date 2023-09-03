@@ -1,5 +1,4 @@
 #include "path/branch.hpp"
-#include "iterator/index_t.hpp"
 
 #include <array>
 #include <boost/test/unit_test.hpp>
@@ -8,6 +7,8 @@
 #include <string>
 #include <type_traits>
 #include <utility>
+
+#include "iterator/index_t.hpp"
 
 #define TEST( CONDITION ) BOOST_TEST( ( CONDITION ) == true )
 
@@ -197,9 +198,15 @@ BOOST_AUTO_TEST_CASE( test_case6_contain ) {
   std::string branch_string( TEST_RELATIVE_PATH );
   branch b( branch_string );
 
-  std::cout << "src/crep index: " << b.contains( branch( "src/crep" ) ) << std::endl;
+  std::cout << "src/crep index: " << b.contains( branch( std::string( "src" ) + DELIMITER + std::string( "crep" ) ) )
+            << std::endl;
   TEST( static_cast<std::size_t>( b.contains( branch( "crep" ) ) ) == 3 );
-  TEST( static_cast<std::size_t> ( b.contains( branch( std::string( "src" ) + DELIMITER + std::string( "crep" ) ) ) ) == 2 );
+  TEST(
+      static_cast<std::size_t>( b.contains( branch( std::string( "src" ) + DELIMITER + std::string( "crep" ) ) ) ) == 2
+  );
+  TEST(
+      static_cast<std::size_t>( b.contains( branch( std::string( "src" ) + DELIMITER + std::string( "crep" ) ) ) ) == 2
+  );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
