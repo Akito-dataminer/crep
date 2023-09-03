@@ -1,7 +1,6 @@
 #include "path/branch.hpp"
 
 #include <algorithm>
-#include <iostream>
 #include <iterator>
 
 #include "config/config.hpp"
@@ -60,8 +59,6 @@ branch::index_type branch::contains( branch const &maybe_contain ) const noexcep
   auto branch_compare = [&]( const_iterator const &citr ) constexpr -> bool {
     bool is_contained = true;
     for ( std::size_t i = 0; i < maybe_contain.size(); ++i ) {
-      std::cout << "i: " << i << std::endl;
-      std::cout << "maybe_contain[i]: " << maybe_contain[i] << std::endl;
       if ( *( citr + i ) != maybe_contain[i] ) {
         is_contained = false;
         break;
