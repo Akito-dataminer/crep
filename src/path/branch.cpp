@@ -4,6 +4,7 @@
 #include <iterator>
 
 #include "config/config.hpp"
+#include "iterator/index_t.hpp"
 #include "util/throw_if.hpp"
 
 namespace path {
@@ -51,6 +52,35 @@ void branch::truncate( branch const &truncate_branch ) {
   path_element_.erase( remove_begin, this_itr );
 }
 
+branch::index_type branch::contains( branch const &maybe_contain ) const noexcept {
+  const_iterator const element_end = path_element_.cend();
+  const_iterator match_begin;
+
+  auto branch_compare = [&]( const_iterator const &citr ) constexpr -> bool {
+    bool is_contained = true;
+    for ( std::size_t i = 0; i < maybe_contain.size(); ++i ) {
+      if ( *( citr + i ) != maybe_contain[i] ) {
+        is_contained = false;
+        break;
+      }
+    }
+    return is_contained;
+  };
+
+  for ( const_iterator citr = path_element_.cbegin(); citr != element_end; ++citr ) {
+    if ( maybe_contain.size() > static_cast<std::size_t>( std::distance( citr, element_end ) ) ) {
+      match_begin = element_end;
+    }
+    if ( branch_compare( citr ) ) {
+      match_begin = citr;
+      break;
+    } else {
+      continue;
+    }
+  }
+  return index_type( path_element_, match_begin );
+}
+
 std::string branch::buildBranch() const noexcept {
   std::string branch_tmp( "" );
   for ( container_type::const_iterator citr = path_element_.cbegin(); citr != path_element_.cend(); ++citr ) {
@@ -62,7 +92,7 @@ std::string branch::buildBranch() const noexcept {
       branch_tmp += DELIMITER;
       branch_tmp += ( *citr );
 #elif __linux__
-      if ( isRoot( *( citr - 1 ) ) == true ) {
+      if ( isRoot( citr - 1 ) == true ) {
         branch_tmp += ( *citr );
       } else {
         branch_tmp += DELIMITER;
@@ -74,19 +104,37 @@ std::string branch::buildBranch() const noexcept {
   return branch_tmp;
 }
 
-bool branch::isRoot( std::string const &maybe_root ) const noexcept {
+bool branch::isRoot( container_type::const_iterator maybe_point_root ) const noexcept {
   bool is_root = false;
+  std::string maybe_root = *maybe_point_root;
+  container_type::difference_type index = std::distance( path_element_.begin(), maybe_point_root );
+  if ( index == 0 ) {
 #ifdef _WIN32
-  if ( maybe_root[0] >= 'A' && maybe_root[0] <= 'Z' ) {
-    if ( maybe_root[1] == ':' ) {
+    if ( maybe_root.size() == 2 ) {
+      if ( maybe_root[0] >= 'A' && maybe_root[0] <= 'Z' ) {
+        if ( maybe_root[1] == ':' ) {
+          is_root = true;
+        }
+      }
+    }
+#elif __linux__
+    if ( maybe_root == "/" ) {
+      is_root = true;
+    }
+#endif
+  }
+  return is_root;
+}
+
+bool branch::isCurrentDirectory( container_type::const_iterator maybe_point_root ) const noexcept {
+  bool is_root = false;
+  std::string maybe_root = *maybe_point_root;
+  container_type::difference_type index = std::distance( path_element_.begin(), maybe_point_root );
+  if ( index == 0 ) {
+    if ( maybe_root == "." ) {
       is_root = true;
     }
   }
-#elif __linux__
-  if ( maybe_root == "/" ) {
-    is_root = true;
-  }
-#endif
   return is_root;
 }
 

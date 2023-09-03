@@ -1,4 +1,5 @@
 #include "path/branch.hpp"
+#include "iterator/index_t.hpp"
 
 #include <array>
 #include <boost/test/unit_test.hpp>
@@ -187,6 +188,18 @@ BOOST_AUTO_TEST_CASE( test_case5_to_string_branch ) {
   TEST( branch_string == b.to_string() );
   TEST( b[0] == "test" );
   TEST( b[1] == "template" );
+}
+
+BOOST_AUTO_TEST_CASE( test_case6_contain ) {
+  using namespace path;
+  std::cout << std::endl;
+
+  std::string branch_string( TEST_RELATIVE_PATH );
+  branch b( branch_string );
+
+  std::cout << "src/crep index: " << b.contains( branch( "src/crep" ) ) << std::endl;
+  TEST( static_cast<std::size_t>( b.contains( branch( "crep" ) ) ) == 3 );
+  TEST( static_cast<std::size_t> ( b.contains( branch( std::string( "src" ) + DELIMITER + std::string( "crep" ) ) ) ) == 2 );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
