@@ -11,6 +11,7 @@
 #include "config/config.hpp"
 #include "path/parse.hpp"
 #include "util/util.hpp"
+#include "iterator/index_t.hpp"
 
 namespace path {
 
@@ -39,6 +40,7 @@ public:
   using const_iterator = container_type::const_iterator;
   using reverse_iterator = container_type::reverse_iterator;
   using const_reverse_iterator = container_type::const_reverse_iterator;
+  using index_type = crep::index_t<container_type::size_type>;
 
   explicit branch() = delete;
   branch( std::string const & );
@@ -50,7 +52,11 @@ public:
 
   // [[deprecated]] void modify( std::function<void( std::string & )> );
   std::string to_string() const noexcept { return buildBranch(); }
+  inline bool is_path() const noexcept { return ( is_absolute_path() || is_relative_path() ); }
+  inline bool is_absolute_path() const noexcept { return ( isRoot( path_element_.cbegin() ) ); }
+  inline bool is_relative_path() const noexcept { return ( isCurrentDirectory( path_element_.cbegin() ) ); }
   void truncate( branch const &truncate_target );
+  index_type contains( branch const & ) const noexcept;
 
   TEMPLATE_HEAD_BRANCH
   inline branch &operator+=( T const &rhs ) noexcept { return this->addBranch<T>( rhs ); }
@@ -76,11 +82,16 @@ public:
   const_reverse_iterator crbegin() const noexcept { return path_element_.crbegin(); }
   const_reverse_iterator crcend() const noexcept { return path_element_.crend(); }
 
+  explicit operator std::filesystem::path() const {
+    return std::filesystem::path( buildBranch() );
+  }
+
 private:
   std::vector<std::string> path_element_;
 
   std::string buildBranch() const noexcept;
-  bool isRoot( std::string const & ) const noexcept;
+  bool isRoot( container_type::const_iterator ) const noexcept;
+  bool isCurrentDirectory( container_type::const_iterator ) const noexcept;
 
   TEMPLATE_HEAD_BRANCH
   branch &addBranch( T const &branchable ) noexcept {
