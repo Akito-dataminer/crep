@@ -34,8 +34,9 @@ public:
 
   constexpr index_t() : index_( npos_v<IndexT> ) {}
   template <typename ContainerT, util::if_nullp_c<detail::has_const_iterator_t<ContainerT>::value> = nullptr>
-  constexpr index_t( ContainerT const & container, typename ContainerT::const_iterator const &citr ) : index_( npos_v<IndexT> ) {
-    if ( citr != container.cbegin() ) {
+  constexpr index_t( ContainerT const &container, typename ContainerT::const_iterator const &citr )
+      : index_( npos_v<IndexT> ) {
+    if ( citr != container.cend() ) {
       index_ = std::distance( container.cbegin(), citr );
     }
   }
