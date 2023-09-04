@@ -16,6 +16,9 @@
 int main( int const argc, char const *argv[] ) {
   int return_value = 0;
   try {
+    util::throw_if<std::invalid_argument>( argc < 2, "please specify the project name" );
+    path::branch project_name( argv[1] );
+
     // スケルトンプログラムを保管しているディレクトリを設定する。
     char const *environment_variable = std::getenv( GET_ENVIRONMENT_VARIABLE );
     util::throw_if<std::runtime_error>(
@@ -48,6 +51,7 @@ int main( int const argc, char const *argv[] ) {
       return is_member_of_ignore_list;
     };
 
+    std::filesystem::create_directory( static_cast<std::filesystem::path>( path::branch( "./" ) + project_name ) );
     for ( decltype( original_branches )::const_iterator citr = original_branches.cbegin();
           citr != original_branches.end(); ++citr ) {
       if ( ignore_branch( *citr ) ) {
@@ -58,7 +62,7 @@ int main( int const argc, char const *argv[] ) {
       path::branch original_branch = *citr;
 
       original_branch.truncate( skeleton_dir );
-      dest_name += original_branch;
+      dest_name += project_name + original_branch;
 
       source_to_dest.emplace_back( *citr, dest_name );
     }
