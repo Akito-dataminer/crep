@@ -2,49 +2,84 @@
  ****************************************/
 
 #include "config/config.hpp"
+#include "path/branch.hpp"
 #include "util/path.hpp"
+#include "util/throw_if.hpp"
 
 // std
 #include <cstdlib>
 #include <iostream>
 #include <string>
-#include <vector>
 #include <utility>
+#include <vector>
 
-int main( int argc, char const * argv[] ) {
-  // スケルトンプログラムを保管しているディレクトリを設定する。
-  char const * environment_variable = std::getenv( GET_ENVIRONMENT_VARIABLE );
-  if ( environment_variable == nullptr ) {
-    std::cerr << "The environment variable " << GET_ENVIRONMENT_VARIABLE << " is not able to be read." << std::endl;
-    return -1;
-  }
-  std::string skeleton_dir = std::string( environment_variable ) + std::string( APPEND_DIRECTORY );
+int main( int const argc, char const *argv[] ) {
+  int return_value = 0;
+  try {
+    util::throw_if<std::invalid_argument>( argc < 2, "please specify the project name" );
+    path::branch project_name( argv[1] );
 
-  bool is_project_skeleton_exist = std::filesystem::is_directory( skeleton_dir );
+    // スケルトンプログラムを保管しているディレクトリを設定する。
+    char const *environment_variable = std::getenv( GET_ENVIRONMENT_VARIABLE );
+    util::throw_if<std::runtime_error>(
+        environment_variable == nullptr, std::string( "The environment variable " ) +
+                                             std::string( GET_ENVIRONMENT_VARIABLE ) +
+                                             std::string( "is not able to be read." )
+    );
 
-  if ( !is_project_skeleton_exist ) {
-    std::cerr << "There is NOT project skeleton in " << skeleton_dir << std::endl;
-  }
+    path::branch skeleton_dir( std::string( environment_variable ) + std::string( APPEND_DIRECTORY ) );
+    util::throw_if<std::runtime_error>(
+        !std::filesystem::is_directory( skeleton_dir.to_string() ),
+        std::string( "There is NOT project skeleton in " ) + skeleton_dir.to_string()
+    );
 
-  std::vector<std::string> const original_paths = recursive_scan_directory( skeleton_dir );
-  int skeleton_dir_length = skeleton_dir.length() + 1; // skeleton_dirは、末尾が'/'になっていないので、+1しておく
-  std::vector<std::pair<std::string, std::string>> source_to_dest;
+    std::vector<path::branch> const original_branches = path::recursive_scan_directory( skeleton_dir );
+    std::vector<std::pair<path::branch, path::branch>> source_to_dest;
+    std::vector<path::branch> const ignore_list{
+        path::branch( ".git" ), path::branch( "build" ), path::branch( "LICENSE.md" ) };
 
-  for ( auto itr : original_paths ) {
-    std::string dest_name = itr.substr( skeleton_dir_length );
-    if ( dest_name.substr( 0, 4 ) == ".git" ) { continue; }
-    if ( dest_name.substr( 0, 6 ) == "build/" ) { continue; }
-    if ( dest_name.substr( 0, 7 ) == "LICENSE" ) { continue; }
-    source_to_dest.emplace_back( itr, dest_name );
-  }
+    auto ignore_branch = [&ignore_list]( path::branch const &maybe_ignored ) -> bool {
+      using size_type = path::branch::index_type::value_type;
 
-  for ( auto itr : source_to_dest ) {
-    if ( std::filesystem::is_directory( itr.first ) ) {
-      std::filesystem::create_directory( itr.second );
-    } else {
-      std::filesystem::copy( itr.first, itr.second );
+      bool is_member_of_ignore_list = false;
+      for ( decltype( ignore_list )::const_iterator citr = ignore_list.cbegin(); citr != ignore_list.cend(); ++citr ) {
+        if ( static_cast<size_type>( maybe_ignored.contains( *citr ) ) != crep::npos_v<size_type> ) {
+          is_member_of_ignore_list = true;
+          break;
+        }
+      }
+      return is_member_of_ignore_list;
+    };
+
+    std::filesystem::create_directory( static_cast<std::filesystem::path>( path::branch( "./" ) + project_name ) );
+    for ( decltype( original_branches )::const_iterator citr = original_branches.cbegin();
+          citr != original_branches.end(); ++citr ) {
+      if ( ignore_branch( *citr ) ) {
+        continue;
+      }
+
+      path::branch dest_name( "./" );
+      path::branch original_branch = *citr;
+
+      original_branch.truncate( skeleton_dir );
+      dest_name += project_name + original_branch;
+
+      source_to_dest.emplace_back( *citr, dest_name );
     }
-  }
 
-  return 0;
+    for ( auto itr : source_to_dest ) {
+      if ( std::filesystem::is_directory( static_cast<std::filesystem::path>( itr.first ) ) ) {
+        std::filesystem::create_directory( static_cast<std::filesystem::path>( itr.second ) );
+      } else {
+        std::filesystem::copy(
+            static_cast<std::filesystem::path>( itr.first ), static_cast<std::filesystem::path>( itr.second )
+        );
+      }
+    }
+    return_value = 0;
+  } catch ( std::exception &e ) {
+    std::cerr << e.what() << std::endl;
+    return_value = -1;
+  }
+  return return_value;
 }
