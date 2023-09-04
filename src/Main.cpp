@@ -29,7 +29,6 @@ int main( int const argc, char const *argv[] ) {
         !std::filesystem::is_directory( skeleton_dir.to_string() ),
         std::string( "There is NOT project skeleton in " ) + skeleton_dir.to_string()
     );
-    std::cout << "skeleton_dir.to_string: " << skeleton_dir.to_string() << std::endl;
 
     std::vector<path::branch> const original_branches = path::recursive_scan_directory( skeleton_dir );
     std::vector<std::pair<path::branch, path::branch>> source_to_dest;
@@ -61,20 +60,18 @@ int main( int const argc, char const *argv[] ) {
       original_branch.truncate( skeleton_dir );
       dest_name += original_branch;
 
-      std::cout << citr->to_string() << "  ->  " << dest_name.to_string() << std::endl;
-
       source_to_dest.emplace_back( *citr, dest_name );
     }
 
-    // for ( auto itr : source_to_dest ) {
-    //   if ( std::filesystem::is_directory( static_cast<std::filesystem::path>( itr.first ) ) ) {
-    //     std::filesystem::create_directory( static_cast<std::filesystem::path>( itr.second ) );
-    //   } else {
-    //     std::filesystem::copy(
-    //         static_cast<std::filesystem::path>( itr.first ), static_cast<std::filesystem::path>( itr.second )
-    //     );
-    //   }
-    // }
+    for ( auto itr : source_to_dest ) {
+      if ( std::filesystem::is_directory( static_cast<std::filesystem::path>( itr.first ) ) ) {
+        std::filesystem::create_directory( static_cast<std::filesystem::path>( itr.second ) );
+      } else {
+        std::filesystem::copy(
+            static_cast<std::filesystem::path>( itr.first ), static_cast<std::filesystem::path>( itr.second )
+        );
+      }
+    }
     return_value = 0;
   } catch ( std::exception &e ) {
     std::cerr << e.what() << std::endl;
