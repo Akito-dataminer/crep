@@ -7,6 +7,8 @@
 #include "iterator/index_t.hpp"
 #include "util/throw_if.hpp"
 
+namespace crep {
+
 namespace path {
 
 branch::branch( std::string const &path_element ) : path_element_( 0 ) {
@@ -139,3 +141,5 @@ bool branch::isCurrentDirectory( container_type::const_iterator maybe_point_root
 }
 
 }  // namespace path
+
+}  // namespace crep

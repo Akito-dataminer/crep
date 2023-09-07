@@ -10,6 +10,8 @@
 #include "util/throw_if.hpp"
 #include "util/util.hpp"
 
+namespace crep {
+
 namespace path {
 
 namespace parse {
@@ -76,3 +78,5 @@ private:
 }  // namespace parse
 
 }  // namespace path
+
+}  // namespace crep
