@@ -27,7 +27,7 @@
 STATIC_CONSTEXPR char const *GET_ENVIRONMENT_VARIABLE = "LocalAppData";
 STATIC_CONSTEXPR char const *APPEND_DIRECTORY = "\\crep\\.cpp_skeleton";
 STATIC_CONSTEXPR char const DELIMITER = '\\';
-STATIC_CONSTEXPR path::character::character_list invalid_character_list(
+STATIC_CONSTEXPR crep::character::character_list invalid_character_list(
     { static_cast<char>( 1 ),
       static_cast<char>( 2 ),
       static_cast<char>( 3 ),
@@ -72,5 +72,5 @@ STATIC_CONSTEXPR path::character::character_list invalid_character_list(
 STATIC_CONSTEXPR char const *GET_ENVIRONMENT_VARIABLE = "HOME";
 STATIC_CONSTEXPR char const *APPEND_DIRECTORY = "/.config/crep/.cpp_skeleton";
 STATIC_CONSTEXPR char const DELIMITER = '/';
-STATIC_CONSTEXPR path::character::character_list invalid_character_list( { '\\', '\0' } );
+STATIC_CONSTEXPR crep::character::character_list invalid_character_list( { '\\', '\0' } );
 #endif

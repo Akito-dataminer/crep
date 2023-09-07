@@ -9,9 +9,11 @@
 #include <vector>
 
 #include "config/config.hpp"
+#include "iterator/index_t.hpp"
 #include "path/parse.hpp"
 #include "util/util.hpp"
-#include "iterator/index_t.hpp"
+
+namespace crep {
 
 namespace path {
 
@@ -30,7 +32,7 @@ STATIC_CONSTEXPR bool const is_convertible_to_branch = std::is_convertible_v<T, 
 #ifdef __cpp_concepts
 #  define TEMPLATE_HEAD_BRANCH template <convertible_to_branch T>
 #else
-#  define TEMPLATE_HEAD_BRANCH template <typename T, util::if_nullp_c<is_convertible_to_branch<T>> * = nullptr>
+#  define TEMPLATE_HEAD_BRANCH template <typename T, crep::if_nullp_c<is_convertible_to_branch<T>> * = nullptr>
 #endif
 
 class branch {
@@ -82,9 +84,7 @@ public:
   const_reverse_iterator crbegin() const noexcept { return path_element_.crbegin(); }
   const_reverse_iterator crcend() const noexcept { return path_element_.crend(); }
 
-  explicit operator std::filesystem::path() const {
-    return std::filesystem::path( buildBranch() );
-  }
+  explicit operator std::filesystem::path() const { return std::filesystem::path( buildBranch() ); }
 
 private:
   std::vector<std::string> path_element_;
@@ -105,3 +105,5 @@ private:
 };
 
 }  // namespace path
+
+}  // namespace crep

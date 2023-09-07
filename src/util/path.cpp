@@ -6,6 +6,8 @@
 #include "config/config.hpp"
 #include "util/throw_if.hpp"
 
+namespace crep {
+
 namespace path {
 
 void recursive_scan_directory( std::string const &scanning_path, std::vector<std::string> &paths ) {
@@ -54,3 +56,5 @@ std::vector<path::branch> recursive_scan_directory( path::branch const &scanning
 }
 
 }  // namespace path
+
+}  // namespace crep

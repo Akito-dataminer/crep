@@ -16,30 +16,30 @@
 int main( int const argc, char const *argv[] ) {
   int return_value = 0;
   try {
-    util::throw_if<std::invalid_argument>( argc < 2, "please specify the project name" );
-    path::branch project_name( argv[1] );
+    crep::throw_if<std::invalid_argument>( argc < 2, "please specify the project name" );
+    crep::path::branch project_name( argv[1] );
 
     // スケルトンプログラムを保管しているディレクトリを設定する。
     char const *environment_variable = std::getenv( GET_ENVIRONMENT_VARIABLE );
-    util::throw_if<std::runtime_error>(
+    crep::throw_if<std::runtime_error>(
         environment_variable == nullptr, std::string( "The environment variable " ) +
                                              std::string( GET_ENVIRONMENT_VARIABLE ) +
                                              std::string( "is not able to be read." )
     );
 
-    path::branch skeleton_dir( std::string( environment_variable ) + std::string( APPEND_DIRECTORY ) );
-    util::throw_if<std::runtime_error>(
+    crep::path::branch skeleton_dir( std::string( environment_variable ) + std::string( APPEND_DIRECTORY ) );
+    crep::throw_if<std::runtime_error>(
         !std::filesystem::is_directory( skeleton_dir.to_string() ),
         std::string( "There is NOT project skeleton in " ) + skeleton_dir.to_string()
     );
 
-    std::vector<path::branch> const original_branches = path::recursive_scan_directory( skeleton_dir );
-    std::vector<std::pair<path::branch, path::branch>> source_to_dest;
-    std::vector<path::branch> const ignore_list{
-        path::branch( ".git" ), path::branch( "build" ), path::branch( "LICENSE.md" ) };
+    std::vector<crep::path::branch> const original_branches = crep::path::recursive_scan_directory( skeleton_dir );
+    std::vector<std::pair<crep::path::branch, crep::path::branch>> source_to_dest;
+    std::vector<crep::path::branch> const ignore_list{
+        crep::path::branch( ".git" ), crep::path::branch( "build" ), crep::path::branch( "LICENSE.md" ) };
 
-    auto ignore_branch = [&ignore_list]( path::branch const &maybe_ignored ) -> bool {
-      using size_type = path::branch::index_type::value_type;
+    auto ignore_branch = [&ignore_list]( crep::path::branch const &maybe_ignored ) -> bool {
+      using size_type = crep::path::branch::index_type::value_type;
 
       bool is_member_of_ignore_list = false;
       for ( decltype( ignore_list )::const_iterator citr = ignore_list.cbegin(); citr != ignore_list.cend(); ++citr ) {
@@ -51,15 +51,16 @@ int main( int const argc, char const *argv[] ) {
       return is_member_of_ignore_list;
     };
 
-    std::filesystem::create_directory( static_cast<std::filesystem::path>( path::branch( "./" ) + project_name ) );
+    std::filesystem::create_directory( static_cast<std::filesystem::path>( crep::path::branch( "./" ) + project_name )
+    );
     for ( decltype( original_branches )::const_iterator citr = original_branches.cbegin();
           citr != original_branches.end(); ++citr ) {
       if ( ignore_branch( *citr ) ) {
         continue;
       }
 
-      path::branch dest_name( "./" );
-      path::branch original_branch = *citr;
+      crep::path::branch dest_name( "./" );
+      crep::path::branch original_branch = *citr;
 
       original_branch.truncate( skeleton_dir );
       dest_name += project_name + original_branch;

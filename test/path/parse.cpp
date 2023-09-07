@@ -8,7 +8,7 @@
 BOOST_AUTO_TEST_SUITE( test_branch )
 
 BOOST_AUTO_TEST_CASE( test_case1 ) {
-  using namespace path::parse;
+  using namespace crep::path::parse;
 
 #if _WIN32
   std::string absolute_path( "C:\\Users\\username\\AppData\\Local\\nvim\\init.lua" );
