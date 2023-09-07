@@ -6,6 +6,8 @@
 
 #include <utility>
 
+namespace crep {
+
 namespace path {
 
 namespace character {
@@ -29,7 +31,7 @@ public:
   CharT list_[N];
 };
 
-} // detail
+}  // namespace detail
 
 template <typename CharT, std::size_t N>
 struct character_list {
@@ -40,9 +42,9 @@ struct character_list {
   constexpr character_list( CharT const ( &char_array )[N] )
       : list_impl_( char_array, std::make_index_sequence<N>() ) {}
   constexpr character_list( character_list const & ) = default;
-  constexpr character_list & operator= ( character_list const & ) = default;
+  constexpr character_list &operator=( character_list const & ) = default;
   constexpr character_list( character_list && ) noexcept = default;
-  constexpr character_list & operator= ( character_list && ) noexcept = default;
+  constexpr character_list &operator=( character_list && ) noexcept = default;
   ~character_list() = default;
 
   constexpr size_type size() const noexcept { return N; }
@@ -50,7 +52,7 @@ struct character_list {
 
   container_type list_impl_;
 
-  constexpr bool is_there( value_type const & maybe_member ) const noexcept {
+  constexpr bool is_there( value_type const &maybe_member ) const noexcept {
     bool result = false;
     for ( size_type i = 0; i < size(); ++i ) {
       if ( list_impl_.list_[i] == maybe_member ) {
@@ -64,3 +66,5 @@ struct character_list {
 }  // namespace character
 
 }  // namespace path
+
+}  // namespace crep
