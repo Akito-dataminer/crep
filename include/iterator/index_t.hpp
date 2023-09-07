@@ -24,7 +24,7 @@ STATIC_CONSTEXPR bool is_uint_v = std::is_integral_v<MaybeUInt> && std::is_unsig
 
 }  // namespace detail
 
-template <typename IndexT, util::if_nullp_c<detail::is_uint_v<IndexT>> = nullptr>
+template <typename IndexT, crep::if_nullp_c<detail::is_uint_v<IndexT>> = nullptr>
 STATIC_CONSTEXPR IndexT npos_v = -1;
 
 template <typename IndexT>
@@ -33,7 +33,7 @@ public:
   using value_type = IndexT;
 
   constexpr index_t() : index_( npos_v<IndexT> ) {}
-  template <typename ContainerT, util::if_nullp_c<detail::has_const_iterator_t<ContainerT>::value> = nullptr>
+  template <typename ContainerT, crep::if_nullp_c<detail::has_const_iterator_t<ContainerT>::value> = nullptr>
   constexpr index_t( ContainerT const &container, typename ContainerT::const_iterator const &citr )
       : index_( npos_v<IndexT> ) {
     if ( citr != container.cend() ) {

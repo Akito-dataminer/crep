@@ -6,8 +6,9 @@
 
 #include <utility>
 
-namespace util {
+namespace crep {
 
-template<bool Cond> using if_nullp_c = std::enable_if_t<Cond, std::nullptr_t>;
+template <bool Cond>
+using if_nullp_c = std::enable_if_t<Cond, std::nullptr_t>;
 
-} // util
+}  // namespace crep

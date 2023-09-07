@@ -32,7 +32,7 @@ STATIC_CONSTEXPR bool const is_convertible_to_branch = std::is_convertible_v<T, 
 #ifdef __cpp_concepts
 #  define TEMPLATE_HEAD_BRANCH template <convertible_to_branch T>
 #else
-#  define TEMPLATE_HEAD_BRANCH template <typename T, util::if_nullp_c<is_convertible_to_branch<T>> * = nullptr>
+#  define TEMPLATE_HEAD_BRANCH template <typename T, crep::if_nullp_c<is_convertible_to_branch<T>> * = nullptr>
 #endif
 
 class branch {
