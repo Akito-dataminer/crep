@@ -11,6 +11,8 @@
 #include "config/config.hpp"
 #include "util/util.hpp"
 
+namespace crep {
+
 namespace util {
 
 #ifdef __cpp_concepts
@@ -35,3 +37,5 @@ void throw_if( bool const throw_condition, std::string const &error_message ) {
 }
 
 }  // namespace util
+
+}  // namespace crep

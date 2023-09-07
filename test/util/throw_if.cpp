@@ -7,7 +7,7 @@
 BOOST_AUTO_TEST_SUITE( test_throw_if )
 
 BOOST_AUTO_TEST_CASE( test_case1 ) {
-  BOOST_CHECK_THROW( util::throw_if<std::runtime_error>( true, "error" ), std::runtime_error );
+  BOOST_CHECK_THROW( crep::util::throw_if<std::runtime_error>( true, "error" ), std::runtime_error );
   // util::throw_if<std::string>( false, "error" ); // error( this error is correct )
 }
 
