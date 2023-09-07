@@ -22,8 +22,8 @@
 BOOST_AUTO_TEST_SUITE( test_character )
 
 BOOST_AUTO_TEST_CASE( test_case1_character_list_feature ) {
-  using namespace crep::path::character;
-  using namespace crep::path::character::detail;
+  using namespace crep::character;
+  using namespace crep::character::detail;
 
   constexpr character_list_impl<char, 2> list_impl( { '\\', '\0' }, std::make_index_sequence<2>() );
   static_assert( std::is_trivially_destructible_v<decltype( list_impl )> );
@@ -37,7 +37,7 @@ BOOST_AUTO_TEST_CASE( test_case1_character_list_feature ) {
 }
 
 BOOST_AUTO_TEST_CASE( test_case1_character_list_functions ) {
-  using namespace crep::path::character;
+  using namespace crep::character;
 
   constexpr char const list[] = { '\\', '\0' };
   constexpr character_list devil_char_list( { '\\', '\0' } );

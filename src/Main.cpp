@@ -16,19 +16,19 @@
 int main( int const argc, char const *argv[] ) {
   int return_value = 0;
   try {
-    crep::util::throw_if<std::invalid_argument>( argc < 2, "please specify the project name" );
+    crep::throw_if<std::invalid_argument>( argc < 2, "please specify the project name" );
     crep::path::branch project_name( argv[1] );
 
     // スケルトンプログラムを保管しているディレクトリを設定する。
     char const *environment_variable = std::getenv( GET_ENVIRONMENT_VARIABLE );
-    crep::util::throw_if<std::runtime_error>(
+    crep::throw_if<std::runtime_error>(
         environment_variable == nullptr, std::string( "The environment variable " ) +
                                              std::string( GET_ENVIRONMENT_VARIABLE ) +
                                              std::string( "is not able to be read." )
     );
 
     crep::path::branch skeleton_dir( std::string( environment_variable ) + std::string( APPEND_DIRECTORY ) );
-    crep::util::throw_if<std::runtime_error>(
+    crep::throw_if<std::runtime_error>(
         !std::filesystem::is_directory( skeleton_dir.to_string() ),
         std::string( "There is NOT project skeleton in " ) + skeleton_dir.to_string()
     );

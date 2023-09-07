@@ -57,7 +57,7 @@ public:
 
   std::string operator[]( std::size_t const index ) const noexcept { return getString( index ); }
   std::string at( std::size_t const index ) const {
-    util::throw_if<std::range_error>( index > token_sequence_.size(), "out of range" );
+    throw_if<std::range_error>( index > token_sequence_.size(), "out of range" );
     return getString( index );
   }
   std::size_t size() const noexcept { return token_sequence_.size(); }

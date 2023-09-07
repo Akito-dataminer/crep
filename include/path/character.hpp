@@ -8,8 +8,6 @@
 
 namespace crep {
 
-namespace path {
-
 namespace character {
 
 namespace detail {
@@ -64,7 +62,5 @@ struct character_list {
 };
 
 }  // namespace character
-
-}  // namespace path
 
 }  // namespace crep

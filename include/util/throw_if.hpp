@@ -13,8 +13,6 @@
 
 namespace crep {
 
-namespace util {
-
 #ifdef __cpp_concepts
 template <typename T>
 concept one_of_exception = std::is_base_of_v<std::exception, T>;
@@ -35,7 +33,5 @@ void throw_if( bool const throw_condition, std::string const &error_message ) {
     throw T( error_message );
   }
 }
-
-}  // namespace util
 
 }  // namespace crep
