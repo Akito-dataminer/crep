@@ -44,7 +44,7 @@ public:
   using const_reverse_iterator = container_type::const_reverse_iterator;
   using index_type = crep::index_t<container_type::size_type>;
 
-  explicit branch() = delete;
+  explicit branch() = default;
   branch( std::string const & );
   branch( branch const & ) = default;
   branch &operator=( branch const & ) = default;
