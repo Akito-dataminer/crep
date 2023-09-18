@@ -18,7 +18,7 @@ int main( int const argc, char const *argv[] ) {
   try {
     crep::throw_if<std::invalid_argument>( argc < 2, "please specify the project name" );
 
-    crep::path::branch template_name( argc >= 3 ? argv[2] : "cpp" );
+    crep::path::branch template_name( argc >= 3 ? argv[2] : DEFAULT_TEMPLATE );
     if ( argc < 3 ) {
       std::cout << "The third argument was not specified. The default, cpp, will be used." << std::endl;
     }

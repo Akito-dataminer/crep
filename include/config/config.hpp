@@ -74,3 +74,5 @@ STATIC_CONSTEXPR char const *APPEND_DIRECTORY = "/.config/crep/template";
 STATIC_CONSTEXPR char const DELIMITER = '/';
 STATIC_CONSTEXPR crep::character::character_list invalid_character_list( { '\\', '\0' } );
 #endif
+
+STATIC_CONSTEXPR char const *DEFAULT_TEMPLATE = "cpp";
