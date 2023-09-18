@@ -17,6 +17,12 @@ int main( int const argc, char const *argv[] ) {
   int return_value = 0;
   try {
     crep::throw_if<std::invalid_argument>( argc < 2, "please specify the project name" );
+
+    crep::path::branch template_name( argc >= 3 ? argv[2] : "cpp" );
+    if ( argc < 3 ) {
+      std::cout << "The third argument was not specified. The default, cpp, will be used." << std::endl;
+    }
+
     crep::path::branch project_name( argv[1] );
 
     // テンプレートを保管しているディレクトリを設定する。
@@ -28,6 +34,7 @@ int main( int const argc, char const *argv[] ) {
     );
 
     crep::path::branch skeleton_dir( std::string( environment_variable ) + std::string( APPEND_DIRECTORY ) );
+    skeleton_dir += template_name;
     crep::throw_if<std::runtime_error>(
         !std::filesystem::is_directory( skeleton_dir.to_string() ),
         std::string( "There is NOT project skeleton in " ) + skeleton_dir.to_string()
