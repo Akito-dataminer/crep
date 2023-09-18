@@ -70,7 +70,7 @@ STATIC_CONSTEXPR crep::character::character_list invalid_character_list(
 );
 #elif __linux__
 STATIC_CONSTEXPR char const *GET_ENVIRONMENT_VARIABLE = "HOME";
-STATIC_CONSTEXPR char const *APPEND_DIRECTORY = "/.config/crep/.cpp_skeleton";
+STATIC_CONSTEXPR char const *APPEND_DIRECTORY = "/.config/crep/template";
 STATIC_CONSTEXPR char const DELIMITER = '/';
 STATIC_CONSTEXPR crep::character::character_list invalid_character_list( { '\\', '\0' } );
 #endif

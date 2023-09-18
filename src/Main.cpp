@@ -19,7 +19,7 @@ int main( int const argc, char const *argv[] ) {
     crep::throw_if<std::invalid_argument>( argc < 2, "please specify the project name" );
     crep::path::branch project_name( argv[1] );
 
-    // スケルトンプログラムを保管しているディレクトリを設定する。
+    // テンプレートを保管しているディレクトリを設定する。
     char const *environment_variable = std::getenv( GET_ENVIRONMENT_VARIABLE );
     crep::throw_if<std::runtime_error>(
         environment_variable == nullptr, std::string( "The environment variable " ) +
