@@ -27,14 +27,14 @@
 BOOST_AUTO_TEST_SUITE( test_branch )
 
 BOOST_AUTO_TEST_CASE( test_case1 ) {
-  using namespace path;
+  using namespace crep::path;
   static_assert( std::is_convertible_v<std::string, branch> == true );
   static_assert( std::is_convertible_v<branch, branch> == true );
   static_assert( std::is_convertible_v<int, branch> == false );
 }
 
 BOOST_AUTO_TEST_CASE( test_case2 ) {
-  using namespace path;
+  using namespace crep::path;
 
   branch j1( "a" );
   branch const j2( "a" ), j3( "b" );
@@ -60,7 +60,7 @@ BOOST_AUTO_TEST_CASE( test_case2 ) {
 }
 
 BOOST_AUTO_TEST_CASE( test_case3 ) {
-  using namespace path;
+  using namespace crep::path;
   std::cout << std::endl;
 
   std::string absolute_path( TEST_ABSOLUTE_PATH );
@@ -99,7 +99,7 @@ BOOST_AUTO_TEST_CASE( test_case4_branch_truncate_single ) {
 #  define TRUNCATE_BRANCH "11"
 #endif
 
-  using namespace path;
+  using namespace crep::path;
 
   std::string absolute_path( TEST_ABSOLUTE_PATH );
   branch b( absolute_path );
@@ -127,7 +127,7 @@ BOOST_AUTO_TEST_CASE( test_case4_branch_truncate_multiple ) {
 #  define TRUNCATE_BRANCH "c++/11"
 #endif
 
-  using namespace path;
+  using namespace crep::path;
 
   std::string absolute_path( TEST_ABSOLUTE_PATH );
   branch b( absolute_path );
@@ -157,14 +157,14 @@ BOOST_AUTO_TEST_CASE( test_case4_branch_truncate_error ) {
 #  define TRUNCATE_BRANCH "c++/11/cstdlib/error/length_over"
 #endif
 
-  using namespace path;
+  using namespace crep::path;
 
   branch b( std::string( TEST_ABSOLUTE_PATH ) );
   BOOST_CHECK_THROW( b.truncate( branch( TRUNCATE_BRANCH ) ), std::invalid_argument );
 }
 
 BOOST_AUTO_TEST_CASE( test_case5_to_string_relative_path ) {
-  using namespace path;
+  using namespace crep::path;
   std::cout << std::endl;
 
   std::string relative_path( TEST_RELATIVE_PATH );
@@ -179,7 +179,7 @@ BOOST_AUTO_TEST_CASE( test_case5_to_string_relative_path ) {
 }
 
 BOOST_AUTO_TEST_CASE( test_case5_to_string_branch ) {
-  using namespace path;
+  using namespace crep::path;
   std::cout << std::endl;
 
   std::string branch_string( BRANCH_NOT_COMPLETELY_PATH );
@@ -192,7 +192,7 @@ BOOST_AUTO_TEST_CASE( test_case5_to_string_branch ) {
 }
 
 BOOST_AUTO_TEST_CASE( test_case6_contain ) {
-  using namespace path;
+  using namespace crep::path;
   std::cout << std::endl;
 
   std::string branch_string( TEST_RELATIVE_PATH );
@@ -210,8 +210,8 @@ BOOST_AUTO_TEST_CASE( test_case6_contain ) {
 }
 
 BOOST_AUTO_TEST_CASE( test_case6_not_contain ) {
-  using namespace path;
-  using size_type = path::branch::index_type::value_type;
+  using namespace crep::path;
+  using size_type = crep::path::branch::index_type::value_type;
   std::cout << std::endl;
 
   std::string branch_string( TEST_RELATIVE_PATH );

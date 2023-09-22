@@ -7,6 +7,8 @@
 #include "iterator/index_t.hpp"
 #include "util/throw_if.hpp"
 
+namespace crep {
+
 namespace path {
 
 branch::branch( std::string const &path_element ) : path_element_( 0 ) {
@@ -19,7 +21,7 @@ branch::branch( std::string const &path_element ) : path_element_( 0 ) {
 }
 
 void branch::truncate( branch const &truncate_branch ) {
-  util::throw_if<std::invalid_argument>( path_element_.size() < truncate_branch.size(), "the argument is too long" );
+  throw_if<std::invalid_argument>( path_element_.size() < truncate_branch.size(), "the argument is too long" );
   container_type::iterator remove_begin, this_end = path_element_.end(), this_itr = path_element_.begin();
   // truncate_branchの最初の要素に一致している要素がどこにあるかを調べるためのループ
   // つまり、remove_beginを求めるためのループ
@@ -36,7 +38,7 @@ void branch::truncate( branch const &truncate_branch ) {
     }
   }
 
-  util::throw_if<std::invalid_argument>( this_itr == this_end, "invalid argument was given to branch::truncate" );
+  throw_if<std::invalid_argument>( this_itr == this_end, "invalid argument was given to branch::truncate" );
 
   // どこまで一致しているかを調べるためのループ
   // つまり、最終的なthis_itrの位置を求めるためのループ
@@ -44,7 +46,7 @@ void branch::truncate( branch const &truncate_branch ) {
   // i.e. This loop demand the last position of this_itr.
   for ( branch::const_iterator truncate_itr = truncate_branch.cbegin(); truncate_itr != truncate_branch.cend();
         ++truncate_itr, ++this_itr ) {
-    util::throw_if<std::invalid_argument>(
+    throw_if<std::invalid_argument>(
         *truncate_itr != *this_itr, "invalid argument was given to branch::truncate"
     );
   }
@@ -139,3 +141,5 @@ bool branch::isCurrentDirectory( container_type::const_iterator maybe_point_root
 }
 
 }  // namespace path
+
+}  // namespace crep

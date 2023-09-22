@@ -10,6 +10,8 @@
 #include "util/throw_if.hpp"
 #include "util/util.hpp"
 
+namespace crep {
+
 namespace path {
 
 namespace parse {
@@ -55,10 +57,7 @@ public:
 
   std::string operator[]( std::size_t const index ) const noexcept { return getString( index ); }
   std::string at( std::size_t const index ) const {
-    if ( index > token_sequence_.size() ) {
-      throw std::range_error( "out of range" );
-    }
-    util::throw_if<std::range_error>( index > token_sequence_.size(), "out of range" );
+    throw_if<std::range_error>( index > token_sequence_.size(), "out of range" );
     return getString( index );
   }
   std::size_t size() const noexcept { return token_sequence_.size(); }
@@ -79,3 +78,5 @@ private:
 }  // namespace parse
 
 }  // namespace path
+
+}  // namespace crep

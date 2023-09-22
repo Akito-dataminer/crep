@@ -1,5 +1,7 @@
 #include "path/parse.hpp"
 
+namespace crep {
+
 namespace path {
 
 namespace parse {
@@ -78,3 +80,5 @@ role branch_parse::type_detection( std::string::const_iterator &itr, std::size_t
 }  // namespace parse
 
 }  // namespace path
+
+}  // namespace crep

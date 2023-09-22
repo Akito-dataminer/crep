@@ -13,6 +13,8 @@
 #include "path/branch.hpp"
 #include "util/util.hpp"
 
+namespace crep {
+
 namespace path {
 
 void recursive_scan_directory( std::string const &scanning_path, std::vector<std::string> & );
@@ -21,3 +23,5 @@ void recursive_scan_directory( path::branch const &scanning_path, std::vector<pa
 std::vector<path::branch> recursive_scan_directory( path::branch const &scanning_path );
 
 }  // namespace path
+
+}  // namespace crep
