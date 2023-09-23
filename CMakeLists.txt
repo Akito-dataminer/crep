@@ -3,13 +3,15 @@ cmake_minimum_required( VERSION 3.22.1 )
 
 # プロジェクト名と使用する言語を指定
 project( crep LANGUAGES CXX )
-set( CMAKE_CXX_STANDARD 20 )
+set( CMAKE_CXX_STANDARD ${std_version} )
+message( STATUS "std version: ${std_version}" )
 
 # compile_commands.jsonを出力するように設定
 set( CMAKE_EXPORT_COMPILE_COMMANDS 1 )
 
 # コンパイラを指定
-set( CMAKE_CXX_COMPILER clang++ )
+set( CMAKE_CXX_COMPILER ${compiler} )
+message( STATUS "used compiler: ${compiler}" )
 
 # CMAKE_CXX_USE_RESPONSE_FILE_FOR_INCLUDESがONになっていないと
 # unixスタイルのインクルードパス指定になるため、
