@@ -25,7 +25,7 @@
 
 #ifdef _WIN32
 STATIC_CONSTEXPR char const *GET_ENVIRONMENT_VARIABLE = "LocalAppData";
-STATIC_CONSTEXPR char const *APPEND_DIRECTORY = "\\crep\\.cpp_skeleton";
+STATIC_CONSTEXPR char const *APPEND_DIRECTORY = "\\crep\\template";
 STATIC_CONSTEXPR char const DELIMITER = '\\';
 STATIC_CONSTEXPR crep::character::character_list invalid_character_list(
     { static_cast<char>( 1 ),
