@@ -43,9 +43,8 @@ include( cmake/processor_num.cmake )
 count_processor( processor_num )
 
 foreach( test_directory IN LISTS test_directories )
-  build_directory( test=1 ${compiler} ${std_version} build_dir )
   execute_process(
-    COMMAND ${CMAKE_CTEST_COMMAND}
+    COMMAND ${CMAKE_CTEST_COMMAND} -j${processor_num}
     WORKING_DIRECTORY ${test_directory}
   )
 endforeach()
