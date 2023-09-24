@@ -23,9 +23,13 @@ execute_process(
   WORKING_DIRECTORY ${build_dir}
 )
 
+include( cmake/processor_num.cmake )
+count_processor( processor_num )
+message( STATUS "processor num: ${processor_num}" )
+
 if( ${is_error_occured} EQUAL 0 )
   execute_process(
-    COMMAND ${CMAKE_COMMAND} --build . -j8
+    COMMAND ${CMAKE_COMMAND} --build . -j${processor_num}
     WORKING_DIRECTORY ${build_dir}
   )
 endif()
