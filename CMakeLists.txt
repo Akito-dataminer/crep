@@ -47,16 +47,6 @@ message( STATUS "std version: ${std_version}" )
 # その問題をクリアできる。
 set(CMAKE_CXX_USE_RESPONSE_FILE_FOR_INCLUDES ON)
 
-# 利用できるプロセッサ数を調べる
-include(ProcessorCount)
-ProcessorCount(PROCESSOR_NUM)
-
-# ProcessorCountが失敗していないことを確かめる
-if(NOT PROCESSOR_NUM EQUAL 0)
-  set(CTEST_BUILD_FLAGS -j${PROCESSOR_NUM})
-  set(ctest_test_args ${ctest_test_args} PARALLEL_LEVEL ${PROCESSOR_NUM})
-endif()
-
 # サブディレクトリを追加
 add_subdirectory( src )
 

@@ -1,32 +1,17 @@
 cmake_minimum_required( VERSION 3.22.1 )
 
-if( NOT DEFINED build_type )
-  set( build_type Debug )
-endif()
+include( cmake/ndef_value.cmake )
+include( cmake/config.cmake )
+include( cmake/build_directory.cmake )
 
-message( STATUS "build_type: ${build_type}" )
+display_value( build_type )
+display_value( compiler )
+display_value( std_version )
+display_value( slib )
 
-if( NOT DEFINED slib )
-  set( slib libstdc++ )
-endif()
+build_directory( "${test}" ${compiler} ${std_version} build_dir )
 
-if( NOT DEFINED std_version )
-  set( std_version 20 )
-endif()
-
-if( NOT DEFINED compiler )
-  set( compiler clang++ )
-endif()
-
-if( NOT DEFINED test )
-  set( build_dir ${CMAKE_CURRENT_LIST_DIR}/build )
-  set( project_root ../ )
-else()
-  set( build_dir ${CMAKE_CURRENT_LIST_DIR}/build_for_test/${compiler}/${std_version} )
-  set( project_root ../../../ )
-endif()
-
-message( STATUS "build directory: ${build_dir}" )
+display_value( build_dir )
 
 if( NOT EXISTS ${build_dir} )
   file( MAKE_DIRECTORY ${build_dir} )
@@ -38,9 +23,13 @@ execute_process(
   WORKING_DIRECTORY ${build_dir}
 )
 
+include( cmake/processor_num.cmake )
+count_processor( processor_num )
+message( STATUS "processor num: ${processor_num}" )
+
 if( ${is_error_occured} EQUAL 0 )
   execute_process(
-    COMMAND ${CMAKE_COMMAND} --build . -j8
+    COMMAND ${CMAKE_COMMAND} --build . -j${processor_num}
     WORKING_DIRECTORY ${build_dir}
   )
 endif()
