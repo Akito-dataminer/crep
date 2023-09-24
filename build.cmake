@@ -8,8 +8,10 @@ display_value( build_type )
 display_value( compiler )
 display_value( std_version )
 display_value( slib )
+
+build_directory( ${compiler} ${std_version} build_dir )
+
 display_value( build_dir )
-display_value( project_root )
 
 if( NOT EXISTS ${build_dir} )
   file( MAKE_DIRECTORY ${build_dir} )
