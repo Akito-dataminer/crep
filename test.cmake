@@ -28,9 +28,11 @@ foreach( compiler IN LISTS available_compilers )
   foreach( std_version IN LISTS available_std_versions )
     build_directory( ${test} ${compiler} ${std_version} build_directory )
     list( APPEND test_directories ${build_directory} )
+
     message( STATUS "Now compiling by ${compiler} with C++${std_version}" )
     execute_process(
-      COMMAND ${CMAKE_COMMAND} ${project_root} -Dtest=1 -Dstd_version=${std_version} -Dcompiler=${compiler} -P build.cmake
+      COMMAND ${CMAKE_COMMAND} . -Dtest=1 -Dstd_version=${std_version} -Dcompiler=${compiler} -P build.cmake
+      WORKING_DIRECTORY ${project_root}
     )
     message( "" )
   endforeach()
