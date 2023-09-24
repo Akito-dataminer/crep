@@ -9,7 +9,7 @@ display_value( compiler )
 display_value( std_version )
 display_value( slib )
 
-build_directory( ${compiler} ${std_version} build_dir )
+build_directory( "${test}" ${compiler} ${std_version} build_dir )
 
 display_value( build_dir )
 
