@@ -16,7 +16,7 @@ include( ${PROJECT_SOURCE_DIR}/cmake/compile_option.cmake )
 add_compile_option( ${OUTPUT} )
 
 if( WIN32 AND CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT )
-  set( CMAKE_INSTALL_PREFIX "C:/\"Program Files\"/crep" CACHE PATH "Installation path prefix absorbed the difference of UNIX(Linux) and Windows" FORCE )
+  set( CMAKE_INSTALL_PREFIX "C:/Program Files/crep" CACHE PATH "Installation path prefix absorbed the difference of UNIX(Linux) and Windows" FORCE )
 endif()
 
 include( ${PROJECT_SOURCE_DIR}/cmake/ndef_value.cmake )
