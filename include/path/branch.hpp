@@ -48,12 +48,13 @@ public:
   branch( std::string const & );
   branch( branch const & ) = default;
   branch &operator=( branch const & ) = default;
-  branch( branch && rhs ) noexcept { *this = std::move( rhs ); }
-  branch &operator=( branch && rhs ) noexcept {
-    if ( rhs.size() == 0 ) {
+  branch( branch &&rhs ) noexcept { *this = std::move( rhs ); }
+  branch &operator=( branch &&rhs ) noexcept {
+    if ( this != &rhs ) {
       path_element_.clear();
-    } else {
-      path_element_ = std::move( rhs.path_element_ );
+      if ( rhs.size() != 0 ) {
+        path_element_ = std::move( rhs.path_element_ );
+      }
     }
     return *this;
   }
