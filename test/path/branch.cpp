@@ -11,6 +11,8 @@
 #include "iterator/index_t.hpp"
 
 #define TEST( CONDITION ) BOOST_TEST( ( CONDITION ) == true )
+#define INDICATE_TEST_CASE \
+  std::cout << "======== " << boost::unit_test::framework::current_test_case().p_name << " ========" << std::endl;
 
 #if _WIN32
 #  define TEST_ABSOLUTE_PATH "C:\\Users\\username\\AppData\\Local\\nvim\\init.lua"
