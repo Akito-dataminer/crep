@@ -26,6 +26,21 @@
 #  define BRANCH_LIST "/", "usr", "include", "c++", "11", "cstdlib"
 #endif
 
+namespace crep::test {
+
+auto container_test = []( auto const &target, auto const &correct ) constexpr -> void {
+  TEST( target.size() == correct.size() );
+
+  for ( auto [target_itr, correct_itr] = std::pair{ target.cbegin(), correct.cbegin() }; target_itr != target.cend();
+        ++target_itr, ++correct_itr ) {
+    std::cout << "*target_itr: " << *target_itr << std::endl;
+    std::cout << "*correct_itr: " << *correct_itr << std::endl;
+    TEST( *target_itr == *correct_itr );
+  }
+};
+
+}  // namespace crep::test
+
 BOOST_AUTO_TEST_SUITE( test_branch )
 
 BOOST_AUTO_TEST_CASE( test_case1 ) {
@@ -236,22 +251,12 @@ BOOST_AUTO_TEST_CASE( test_branch_move_construct ) {
   branch branch_string( test_path );
   branch moved_branch;
 
-  auto container_test = []( auto const &target, auto const &correct ) constexpr -> void {
-    TEST( target.size() == correct.size() );
-    for ( auto [target_itr, correct_itr] = std::pair{ target.cbegin(), correct.cbegin() }; target_itr != target.cend();
-          ++target_itr, ++correct_itr ) {
-      std::cout << "*target_itr: " << *target_itr << std::endl;
-      std::cout << "*correct_itr: " << *correct_itr << std::endl;
-      TEST( *target_itr == *correct_itr );
-    }
-  };
-
   moved_branch = std::move( branch_string );
-  container_test( moved_branch, correct_branches );
+  crep::test::container_test( moved_branch, correct_branches );
 
   std::cout << std::endl;
   branch moved_branch_ctor( branch( TEST_ABSOLUTE_PATH ) );
-  container_test( moved_branch_ctor, correct_branches );
+  crep::test::container_test( moved_branch_ctor, correct_branches );
 
   moved_branch = branch( "" );
   TEST( moved_branch.size() == 0 );
