@@ -227,4 +227,34 @@ BOOST_AUTO_TEST_CASE( test_case6_not_contain ) {
   TEST( static_cast<size_type>( b.contains( branch( "not_contain" ) ) ) == crep::npos_v<size_type> );
 }
 
+BOOST_AUTO_TEST_CASE( test_branch_move_construct ) {
+  using namespace crep::path;
+  INDICATE_TEST_CASE
+
+  std::vector<std::string> correct_branches = { BRANCH_LIST };
+  std::string test_path = TEST_ABSOLUTE_PATH;
+  branch branch_string( test_path );
+  branch moved_branch;
+
+  auto container_test = []( auto const &target, auto const &correct ) constexpr -> void {
+    TEST( target.size() == correct.size() );
+    for ( auto [target_itr, correct_itr] = std::pair{ target.cbegin(), correct.cbegin() }; target_itr != target.cend();
+          ++target_itr, ++correct_itr ) {
+      std::cout << "*target_itr: " << *target_itr << std::endl;
+      std::cout << "*correct_itr: " << *correct_itr << std::endl;
+      TEST( *target_itr == *correct_itr );
+    }
+  };
+
+  moved_branch = std::move( branch_string );
+  container_test( moved_branch, correct_branches );
+
+  std::cout << std::endl;
+  branch moved_branch_ctor( branch( TEST_ABSOLUTE_PATH ) );
+  container_test( moved_branch_ctor, correct_branches );
+
+  moved_branch = branch( "" );
+  TEST( moved_branch.size() == 0 );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
