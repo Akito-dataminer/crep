@@ -51,8 +51,9 @@ public:
   branch( branch &&rhs ) noexcept { *this = std::move( rhs ); }
   branch &operator=( branch &&rhs ) noexcept {
     if ( this != &rhs ) {
-      path_element_.clear();
-      if ( rhs.size() != 0 ) {
+      if ( rhs.size() == 0 ) {
+        path_element_.clear();
+      } else {
         path_element_ = std::move( rhs.path_element_ );
       }
     }
