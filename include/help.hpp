@@ -17,7 +17,7 @@ constexpr const char *usage = R"(  Please specify as below:
     crep <project_name> <template_name>
 )";
 
-constexpr const char *help = R"(  crep is an abbreviation for \"CREate Project\".
+constexpr const char *help = R"(  crep is an abbreviation for "CREate Project".
   Usage is below:
     crep <project_name> <template_name>
 
