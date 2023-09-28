@@ -1,13 +1,23 @@
-/****************************************
- ****************************************/
+/*****************************************************************
+ * crep = simplifiation tool for project creation
+ *
+ * Copyright(c) 2023 Akito Dataminer
+ *
+ * This software is released under the MIT License.
+ * Refer the accompanying LICENSE.txt or the description
+ * at the provided URL for details.
+ * http://opensource.org/licenses/mit-license.php
+ ******************************************************************/
 
 #include "config/config.hpp"
+#include "help.hpp"
 #include "path/branch.hpp"
 #include "util/path.hpp"
 #include "util/throw_if.hpp"
 
 // std
 #include <cstdlib>
+#include <cstring>
 #include <iostream>
 #include <string>
 #include <utility>
@@ -16,7 +26,14 @@
 int main( int const argc, char const *argv[] ) {
   int return_value = 0;
   try {
-    crep::throw_if<std::invalid_argument>( argc < 2, "please specify the project name" );
+    for ( int i = 0; i < argc; ++i ) {
+      if ( std::strncmp( argv[i], "--help", 6 ) == 0 ) {
+        std::cout << crep::message::help << std::endl;
+        return return_value;
+      }
+    }
+
+    crep::throw_if<std::invalid_argument>( argc < 2, crep::message::usage );
 
     crep::path::branch template_name( argc >= 3 ? argv[2] : DEFAULT_TEMPLATE );
     if ( argc < 3 ) {

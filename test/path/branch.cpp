@@ -11,6 +11,8 @@
 #include "iterator/index_t.hpp"
 
 #define TEST( CONDITION ) BOOST_TEST( ( CONDITION ) == true )
+#define INDICATE_TEST_CASE \
+  std::cout << "======== " << boost::unit_test::framework::current_test_case().p_name << " ========" << std::endl;
 
 #if _WIN32
 #  define TEST_ABSOLUTE_PATH "C:\\Users\\username\\AppData\\Local\\nvim\\init.lua"
@@ -24,6 +26,21 @@
 #  define BRANCH_LIST "/", "usr", "include", "c++", "11", "cstdlib"
 #endif
 
+namespace crep::test {
+
+auto container_test = []( auto const &target, auto const &correct ) constexpr -> void {
+  TEST( target.size() == correct.size() );
+
+  for ( auto [target_itr, correct_itr] = std::pair{ target.cbegin(), correct.cbegin() }; target_itr != target.cend();
+        ++target_itr, ++correct_itr ) {
+    std::cout << "*target_itr: " << *target_itr << std::endl;
+    std::cout << "*correct_itr: " << *correct_itr << std::endl;
+    TEST( *target_itr == *correct_itr );
+  }
+};
+
+}  // namespace crep::test
+
 BOOST_AUTO_TEST_SUITE( test_branch )
 
 BOOST_AUTO_TEST_CASE( test_case1 ) {
@@ -35,6 +52,7 @@ BOOST_AUTO_TEST_CASE( test_case1 ) {
 
 BOOST_AUTO_TEST_CASE( test_case2 ) {
   using namespace crep::path;
+  INDICATE_TEST_CASE
 
   branch j1( "a" );
   branch const j2( "a" ), j3( "b" );
@@ -61,7 +79,7 @@ BOOST_AUTO_TEST_CASE( test_case2 ) {
 
 BOOST_AUTO_TEST_CASE( test_case3 ) {
   using namespace crep::path;
-  std::cout << std::endl;
+  INDICATE_TEST_CASE
 
   std::string absolute_path( TEST_ABSOLUTE_PATH );
   branch b( absolute_path );
@@ -88,7 +106,6 @@ BOOST_AUTO_TEST_CASE( test_case3 ) {
 #endif
 }
 
-BOOST_AUTO_TEST_CASE( test_case4_branch_truncate_single ) {
 #undef CORRECT_BRANCH_LIST
 #undef TRUNCATE_BRANCH
 #if _WIN32
@@ -99,7 +116,9 @@ BOOST_AUTO_TEST_CASE( test_case4_branch_truncate_single ) {
 #  define TRUNCATE_BRANCH "11"
 #endif
 
+BOOST_AUTO_TEST_CASE( test_case4_branch_truncate_single ) {
   using namespace crep::path;
+  INDICATE_TEST_CASE
 
   std::string absolute_path( TEST_ABSOLUTE_PATH );
   branch b( absolute_path );
@@ -107,16 +126,15 @@ BOOST_AUTO_TEST_CASE( test_case4_branch_truncate_single ) {
 
   b.truncate( std::string( TRUNCATE_BRANCH ) );
 
-  std::cout << std::endl;
-  for ( auto [branch_itr, correct_itr] = std::pair{ b.begin(), truncated_single_branches.begin() };
-        branch_itr != b.end(); ++branch_itr, ++correct_itr ) {
-    std::cout << "*array_itr: " << *correct_itr << std::endl;
-    std::cout << "*branch_itr: " << *branch_itr << std::endl;
-    TEST( *branch_itr == *correct_itr );
-  }
+  crep::test::container_test( b, truncated_single_branches );
+  // for ( auto [branch_itr, correct_itr] = std::pair{ b.begin(), truncated_single_branches.begin() };
+  //       branch_itr != b.end(); ++branch_itr, ++correct_itr ) {
+  //   std::cout << "*array_itr: " << *correct_itr << std::endl;
+  //   std::cout << "*branch_itr: " << *branch_itr << std::endl;
+  //   TEST( *branch_itr == *correct_itr );
+  // }
 }
 
-BOOST_AUTO_TEST_CASE( test_case4_branch_truncate_multiple ) {
 #undef CORRECT_BRANCH_LIST
 #undef TRUNCATE_BRANCH
 #if _WIN32
@@ -127,7 +145,9 @@ BOOST_AUTO_TEST_CASE( test_case4_branch_truncate_multiple ) {
 #  define TRUNCATE_BRANCH "c++/11"
 #endif
 
+BOOST_AUTO_TEST_CASE( test_case4_branch_truncate_multiple ) {
   using namespace crep::path;
+  INDICATE_TEST_CASE
 
   std::string absolute_path( TEST_ABSOLUTE_PATH );
   branch b( absolute_path );
@@ -140,13 +160,13 @@ BOOST_AUTO_TEST_CASE( test_case4_branch_truncate_multiple ) {
   b.truncate( std::string( "c++/11" ) );
 #endif
 
-  std::cout << std::endl;
-  for ( auto [branch_itr, correct_itr] = std::pair{ b.begin(), truncated_single_branches.begin() };
-        branch_itr != b.end(); ++branch_itr, ++correct_itr ) {
-    std::cout << "*array_itr: " << *correct_itr << std::endl;
-    std::cout << "*branch_itr: " << *branch_itr << std::endl;
-    TEST( *branch_itr == *correct_itr );
-  }
+  crep::test::container_test( b, truncated_single_branches );
+  // for ( auto [branch_itr, correct_itr] = std::pair{ b.begin(), truncated_single_branches.begin() };
+  //       branch_itr != b.end(); ++branch_itr, ++correct_itr ) {
+  //   std::cout << "*array_itr: " << *correct_itr << std::endl;
+  //   std::cout << "*branch_itr: " << *branch_itr << std::endl;
+  //   TEST( *branch_itr == *correct_itr );
+  // }
 }
 
 BOOST_AUTO_TEST_CASE( test_case4_branch_truncate_error ) {
@@ -165,7 +185,7 @@ BOOST_AUTO_TEST_CASE( test_case4_branch_truncate_error ) {
 
 BOOST_AUTO_TEST_CASE( test_case5_to_string_relative_path ) {
   using namespace crep::path;
-  std::cout << std::endl;
+  INDICATE_TEST_CASE
 
   std::string relative_path( TEST_RELATIVE_PATH );
   branch b( relative_path );
@@ -180,7 +200,7 @@ BOOST_AUTO_TEST_CASE( test_case5_to_string_relative_path ) {
 
 BOOST_AUTO_TEST_CASE( test_case5_to_string_branch ) {
   using namespace crep::path;
-  std::cout << std::endl;
+  INDICATE_TEST_CASE
 
   std::string branch_string( BRANCH_NOT_COMPLETELY_PATH );
   branch b( branch_string );
@@ -193,7 +213,7 @@ BOOST_AUTO_TEST_CASE( test_case5_to_string_branch ) {
 
 BOOST_AUTO_TEST_CASE( test_case6_contain ) {
   using namespace crep::path;
-  std::cout << std::endl;
+  INDICATE_TEST_CASE
 
   std::string branch_string( TEST_RELATIVE_PATH );
   branch b( branch_string );
@@ -212,7 +232,7 @@ BOOST_AUTO_TEST_CASE( test_case6_contain ) {
 BOOST_AUTO_TEST_CASE( test_case6_not_contain ) {
   using namespace crep::path;
   using size_type = crep::path::branch::index_type::value_type;
-  std::cout << std::endl;
+  INDICATE_TEST_CASE
 
   std::string branch_string( TEST_RELATIVE_PATH );
   branch b( branch_string );
@@ -223,6 +243,26 @@ BOOST_AUTO_TEST_CASE( test_case6_not_contain ) {
             << static_cast<size_type>( crep::index_t<size_type>() ) << std::endl;
   TEST( static_cast<size_type>( crep::index_t<size_type>() ) == crep::npos_v<size_type> );
   TEST( static_cast<size_type>( b.contains( branch( "not_contain" ) ) ) == crep::npos_v<size_type> );
+}
+
+BOOST_AUTO_TEST_CASE( test_branch_move_construct ) {
+  using namespace crep::path;
+  INDICATE_TEST_CASE
+
+  std::vector<std::string> correct_branches = { BRANCH_LIST };
+  std::string test_path = TEST_ABSOLUTE_PATH;
+  branch branch_string( test_path );
+  branch moved_branch;
+
+  moved_branch = std::move( branch_string );
+  crep::test::container_test( moved_branch, correct_branches );
+
+  std::cout << std::endl;
+  branch moved_branch_ctor( branch( TEST_ABSOLUTE_PATH ) );
+  crep::test::container_test( moved_branch_ctor, correct_branches );
+
+  moved_branch = branch( "" );
+  TEST( moved_branch.size() == 0 );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

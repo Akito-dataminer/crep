@@ -1,4 +1,5 @@
 build/
+build_for_test/
 bin/
 .cache/
 wt-*
