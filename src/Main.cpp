@@ -1,5 +1,13 @@
-/****************************************
- ****************************************/
+/*****************************************************************
+ * crep = simplifiation tool for project creation
+ *
+ * Copyright(c) 2023 Akito Dataminer
+ *
+ * This software is released under the MIT License.
+ * Refer the accompanying LICENSE.txt or the description
+ * at the provided URL for details.
+ * http://opensource.org/licenses/mit-license.php
+ ******************************************************************/
 
 #include "config/config.hpp"
 #include "help.hpp"
