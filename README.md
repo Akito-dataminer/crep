@@ -121,35 +121,27 @@ However, this method may make it difficult to control the contents of the file f
 
 # How to use this software?( このソフトウェアを使うには？ )
 ## How to install?( インストール方法 )
-いずれ簡単にインストールできる方法も作ろうとは考えているが、
-ひとまず基本機能を作ることを優先しているため、
-今はまだ簡単にインストールできるような方法は作っていない。
+1. cmake -P build.cmakeで、ツールをビルドする
+(するとbuild/src/crepに実行ファイルが作られる)。
 
-このプログラムを利用したければ、現状ではソースコードからビルドしていただくより他にない。
+コンパイラにこだわりがあるのなら、次のようにして、コンパイラや標準ライブラリを変更することができる。
+cmake -Dslib=libstdc++ -Dcompiler=clang++ -P build.cmake
 
-次の節のいずれかのコマンドを実行すると、
-プロジェクトルートに新しくbuild/というディレクトリが作られる。
-そのbuild/以下の/src/crepというファイルが実行ファイルとなっている。
-crepを他のコマンドと同じく、"crep"とコマンドラインに入力しただけで実行してほしければ、
-<project_root>/build/src/というディレクトリを環境変数に登録すればいい
-(ただし、<project_root>は人によって様々だろうから、適宜自分の環境に合わせて読み変えてほしい)。
-もしくは、環境変数に登録されているディレクトリに、
-<project_root>/build/src/crepへのリンクを作ればいい。
+2. 管理者権限でcmake --installを実行する。
+デフォルトでは、Linux(Ubuntu)なら/usr/local/bin/以下、WindowsならC:\Program files\crep\bin以下にインストールされる。
 
-## How to build this project?
-### If you want to use libstdc++( libstdc++を利用してビルドしたい場合 )
-cmake -Dslib=libstdc++ -P build.cmake
-もしくは、
-cmake -P build.cmake
-
-### If you want to use libc++( libc++を利用してビルドしたい場合 )
-cmake -Dslib=libc++ -P build.cmake
+3. 環境変数に、crepがインストールされたディレクトリを追加する。
 
 ## How to use this software?( このツールの使い方 )
-1. crep(実行ファイル)へのパスを通す。
+1. crep(実行ファイル)を作って、パスを通す。
 2. Linux(Ubuntu)なら~/.config/crep/template/以下、Windowsなら%LocalAppData%\crep\template以下にプロジェクトのテンプレートを保存しておく
-3. crep <project_name> というコマンドを実行すると、カレントディレクトリに<project_name>という名前のディレクトリが作られ、その中にテンプレートがコピーされる。
+3. crep <project_name> <template_name>というコマンドを実行すると、カレントディレクトリに<project_name>という名前のディレクトリが作られ、その中にテンプレートがコピーされる。
+
+ただし、<template_name>を指定しなかった場合は、cppというディレクトリがコピーされる。
 
 ## Operating environment( 動作環境 )
-このソフトウェアは、Ubuntu 22.04LTS上では問題なく動作することを確認している。
+次の環境では動作することを確認している。
+1. Ubuntu 22.04LTS
+2. Windows 11
+
 しかし、他の環境でも動作するかどうかは分からない。
