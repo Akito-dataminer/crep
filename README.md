@@ -127,7 +127,7 @@ However, this method may make it difficult to control the contents of the file f
 コンパイラにこだわりがあるのなら、次のようにして、コンパイラや標準ライブラリを変更することができる。
 cmake -Dslib=libstdc++ -Dcompiler=clang++ -P build.cmake
 
-2. 管理者権限でcmake --installを実行する。
+2. 管理者権限でcmake --install ./buildを実行する。
 デフォルトでは、Linux(Ubuntu)なら/usr/local/bin/以下、WindowsならC:\Program files\crep\bin以下にインストールされる。
 
 3. 環境変数に、crepがインストールされたディレクトリを追加する。
@@ -136,7 +136,7 @@ cmake -Dslib=libstdc++ -Dcompiler=clang++ -P build.cmake
 If you have a preferred compiler, you can switch the compiler and standard library as follows:
 cmake -Dslib=libstdc++ -Dcompiler=clang++ -P build.cmake
 
-2. Run 'cmake --install' with administrator privileges. By default, on Linux (Ubuntu), crep is installed to /usr/local/bin/, and on Windows to C:\Program files\crep\bin.
+2. Run 'cmake --install ./build' with administrator privileges. By default, on Linux (Ubuntu), crep is installed to /usr/local/bin/, and on Windows to C:\Program files\crep\bin.
 
 3. Add the directory where crep is installed to your environment variables.
 
