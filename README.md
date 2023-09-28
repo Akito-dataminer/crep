@@ -132,6 +132,14 @@ cmake -Dslib=libstdc++ -Dcompiler=clang++ -P build.cmake
 
 3. 環境変数に、crepがインストールされたディレクトリを追加する。
 
+1. Build the tool using 'cmake -P build.cmake'. (Then, the executable file is created as build/src/crep).
+If you have a preferred compiler, you can switch the compiler and standard library as follows:
+cmake -Dslib=libstdc++ -Dcompiler=clang++ -P build.cmake
+
+2. Run 'cmake --install' with administrator privileges. By default, on Linux (Ubuntu), crep is installed to /usr/local/bin/, and on Windows to C:\Program files\crep\bin.
+
+3. Add the directory where crep is installed to your environment variables.
+
 ## How to use this software?( このツールの使い方 )
 1. crep(実行ファイル)を作って、パスを通す。
 2. Linux(Ubuntu)なら~/.config/crep/template/以下、Windowsなら%LocalAppData%\crep\template以下にプロジェクトのテンプレートを保存しておく
@@ -139,9 +147,17 @@ cmake -Dslib=libstdc++ -Dcompiler=clang++ -P build.cmake
 
 ただし、<template_name>を指定しなかった場合は、cppというディレクトリがコピーされる。
 
+1. Build the crep executable and add its install path to the environment variables( please reference 'How to install?' section ).
+2. For Linux (Ubuntu), create the project template in ~/.config/crep/template/, and for Windows in %LocalAppData%\crep\template.
+3. By executing 'crep <project_name> <template_name>', a directory named <project_name> will be created in the current directory, and the specified template will be copied into it.
+
+Please note, if you don't specify <template_name>, the 'cpp' directory will be copied.
+
 ## Operating environment( 動作環境 )
-次の環境では動作することを確認している。
+次の環境では動作することは確認している。
 1. Ubuntu 22.04LTS
 2. Windows 11
 
-しかし、他の環境でも動作するかどうかは分からない。
+The functionality has been confirmed in the following environments:
+1. Ubuntu 22.04LTS
+2. Windows 11
